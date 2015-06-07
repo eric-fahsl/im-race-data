@@ -1,0 +1,29 @@
+<div class="col-sm-6 col-md-4 col-xs-12" ng-if="data" ng-class="loadingstatus">
+<span id="racer{{bib}}">
+	<h3>{{data.name}}</h3>
+	<div class="addtlRacerDetails">
+		Bib #{{data.bib}}, Start Time: {{starttime}}
+	</div>
+	<div class="refresh top-refresh" ng-click="refreshData()">Refresh Data</div>
+
+	<race-data-table sport="Swim" splits="data.swim.splits"></race-data-table>
+	<div class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
+	<race-data-table sport="Bike" splits="data.bike.splits"></race-data-table>
+	<div class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
+	<race-data-table sport="Run" splits="data.run.splits"></race-data-table>
+
+	<!-- Transition Table -->
+	<div class="transitionDiv col-xs-10">
+		<span class="transitionName">T1: </span>{{data.transition.T1}}<br/>
+		<span class="transitionName">T2: </span>{{data.transition.T2}}
+		
+		<br/>
+		<div class="sourceLink">Source: <a target='new' href='{{data.url}}'>{{data.url}}</a></div>
+	</div>
+	<div class="col-xs-2">
+		<div class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
+	</div>
+
+</span>
+</div>
+

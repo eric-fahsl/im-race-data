@@ -1,0 +1,9 @@
+<button onclick="$('.top-refresh').click();" type="button" style="float:left;">Reload All</button>
+<div style="clear:both; height:5px;"></div>
+
+<span ng-repeat="racer in raceData.bibs">
+<race-data raceid="{{raceData.raceid}}" racename="{{raceData.racename}}" bib="racer.bib" starttime="{{racer.starttime}}"></race-data>
+</span>
+
+<ng-include src="'views/asterisks.html'"></ng-include>
+

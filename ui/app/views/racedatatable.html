@@ -1,0 +1,24 @@
+	<h4>{{sport}}</h4>
+	<!-- <h6>{{loadingstatus}}</h6> -->
+	<table class="dataTable">
+		<th>Split</th>
+		<th>Dist</th>
+		<th>Split Time</th>
+		<th>Pace</th>
+		<th>Race Time</th>
+		<th>Est Time*</th>
+		<th>Est TOD**</th>
+		
+		<tr ng-repeat="split in splits">
+			<td>{{split.totalDistance}}</td>
+			<td>{{split.splitDistance}}</td>
+			<td>{{split.splitTime}}</td>
+			<td>{{split.pace}}</td>
+			<td>{{split.raceTime}}</td>
+			<td>{{split.estimatedRaceTime}}</td>
+			<td>{{split.estimatedTimeOfDay}}</td>
+		</tr>
+	</table>
+
+
+
