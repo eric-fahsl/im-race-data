@@ -1,20 +1,8 @@
 from bs4 import BeautifulSoup
 import urllib
-# import xmlHelper
 import json
 import random
-
-##RUN SECTION
-# sectionIndex = xmlHelper.searchContentForTag("RUN DETAILS", "", "", "", str(soup), 0)[1]
-
-# distanceResult = xmlHelper.searchContentForTag("km", "", "<td>", "</td>", str(soup), sectionIndex)
-# distanceTime = xmlHelper.searchContentForTag("km", "", "<td>","</td", str(soup), distanceResult[1])
-# sectionIndex = distanceTime[1]
-# print [distanceResult[0], distanceTime[0], sectionIndex]
-
-# xmlHelper.searchContentForTag("km", "km", "<td>", "</td>", str(soup), 19534)
-
-# distanceUnit = "km"
+import sys
 
 def createSoup(url) :
 	#snowUrl = "http://www.snow-forecast.com/resorts/White-Pass/feed.xml"
@@ -62,7 +50,7 @@ def calculateEstimatedTime(distance, pace) :
 	estimatedSeconds = estimatedHours * 3600
 	return convertSecondsToTime(estimatedSeconds)
 
-def createSportObject(soup, sportTableIndex) :
+def createSportObject(soup, sportTableIndex, startTimeSeconds) :
 
 	sportObject = {}
 	# sportObject["activity"] = sportName
@@ -90,6 +78,7 @@ def createSportObject(soup, sportTableIndex) :
 
 		splitSeconds = convertStringTimeToSeconds(split["splitTime"])
 		split["estimatedRaceTime"] = "--:--"
+		split["estimatedTimeOfDay"] = "--:--"
 		#Handle Total Row Differently
 		totalDistance = split["totalDistance"]
 		if split["totalDistance"] == "Total" :
@@ -113,11 +102,14 @@ def createSportObject(soup, sportTableIndex) :
 					latestRaceTimeSec = convertStringTimeToSeconds(latestEstimatedRaceTimeStr)
 				estimatedRaceTimeSec = latestRaceTimeSec + convertStringTimeToSeconds(splitEstimatedSeconds)
 				split["estimatedRaceTime"] = convertSecondsToTime( estimatedRaceTimeSec )
+				split["estimatedTimeOfDay"] = convertSecondsToTime(startTimeSeconds + estimatedRaceTimeSec)
 
 			
 			#if its the last one, 
 			if split["totalDistance"] == "Total" :
 				split["estimatedRaceTime"] = latestEstimatedRaceTimeStr
+				split["estimatedTimeOfDay"] = latestEstimatedTimeOfDayStr
+				
 
 
 			# split["estimatedRaceTime"] = convertSecondsToTime(convertStringTimeToSeconds(latestRaceTime) \
@@ -130,6 +122,7 @@ def createSportObject(soup, sportTableIndex) :
 		# split["estimatedTime"] = calculateEstimatedTime(totalDistance, averageSoFar)
 		latestRaceTimeStr = split["raceTime"]
 		latestEstimatedRaceTimeStr = split["estimatedRaceTime"]
+		latestEstimatedTimeOfDayStr = split["estimatedTimeOfDay"]
 		sportObject['splits'].append(split)
 		index += 1
 
@@ -146,25 +139,44 @@ def getTransitionData(soup, transitionIndex) :
 	transitionData['T2'] = transitionSplits[1].find_all('td')[1].string
 	return transitionData
 
-def getRaceData(raceId='2278373444', race='taiwan', bib=443) :
-	# RACE_ID = "2278373444"
-	# RACE_ID="2278373444"
-	# RACE = "taiwan"
-	# BIB = 443
-	# BIB=1571
-	randomNum = int(random.uniform(0,100))
-	# url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2278373444&race=taiwan&y=2015&athlete=559#axzz3X0O9WgL1"
-	url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
-	# url = "http://tracking.ironmanlive.com/mobileathlete.php?rid=2147483676&race=florida70.3&bib=1571&v=3.0&beta=&1428859800#axzz3X6WZscVO"
-	print url
 
-	soup = createSoup(url)
-	
-	allSports = {}
-	allSports["name"] = soup.h1.string
-	allSports["swim"] = createSportObject(soup, 2)
-	allSports["bike"] = createSportObject(soup, 3)
-	allSports["run"] = createSportObject(soup, 4)
-	allSports["transition"] = getTransitionData(soup, 5)
+raceId = "2278373444"
+# RACE_ID="2278373444"
+race = "taiwan"
+bib = 443
+raceStartTime = "7:00:00"
+# print sys.argv
+#take in arguments
+if len(sys.argv) > 1 :
+	raceId = sys.argv[1]
+	race = sys.argv[2]
+	bib = sys.argv[3] 
+	raceStartTime = sys.argv[4]
 
-	return json.dumps(allSports)
+# BIB=1571
+randomNum = int(random.uniform(0,100))
+# url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2278373444&race=taiwan&y=2015&athlete=559#axzz3X0O9WgL1"
+url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
+# url = "http://tracking.ironmanlive.com/mobileathlete.php?rid=2147483676&race=florida70.3&bib=1571&v=3.0&beta=&1428859800#axzz3X6WZscVO"
+# print url
+
+soup = createSoup(url)
+# soup = BeautifulSoup(open("testdata/IMTW-bike-run.html"))
+# soup = BeautifulSoup(open("testdata/IMTW-full.html"))
+
+raceStartTimeSeconds = convertStringTimeToSeconds(raceStartTime)
+
+allSports = {}
+allSports["name"] = soup.h1.string
+allSports["url"] = url
+allSports["bib"] = bib
+
+allSports["swim"] = createSportObject(soup, 2, raceStartTimeSeconds)
+allSports["bike"] = createSportObject(soup, 3, raceStartTimeSeconds)
+allSports["run"] = createSportObject(soup, 4, raceStartTimeSeconds)
+allSports["transition"] = getTransitionData(soup, 5)
+
+
+print json.dumps(allSports) #, sort_keys=True, indent=4, separators=(',', ': '))
+
+# print calculatePacePerHr(30, convertStringTimeToSeconds('1:03:10'))

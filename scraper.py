@@ -62,7 +62,7 @@ def calculateEstimatedTime(distance, pace) :
 	estimatedSeconds = estimatedHours * 3600
 	return convertSecondsToTime(estimatedSeconds)
 
-def createSportObject(soup, sportTableIndex) :
+def createSportObject(soup, sportTableIndex, startTimeSeconds) :
 
 	sportObject = {}
 	# sportObject["activity"] = sportName
@@ -90,6 +90,7 @@ def createSportObject(soup, sportTableIndex) :
 
 		splitSeconds = convertStringTimeToSeconds(split["splitTime"])
 		split["estimatedRaceTime"] = "--:--"
+		split["estimatedTimeOfDay"] = "--:--"
 		#Handle Total Row Differently
 		totalDistance = split["totalDistance"]
 		if split["totalDistance"] == "Total" :
@@ -113,11 +114,14 @@ def createSportObject(soup, sportTableIndex) :
 					latestRaceTimeSec = convertStringTimeToSeconds(latestEstimatedRaceTimeStr)
 				estimatedRaceTimeSec = latestRaceTimeSec + convertStringTimeToSeconds(splitEstimatedSeconds)
 				split["estimatedRaceTime"] = convertSecondsToTime( estimatedRaceTimeSec )
+				split["estimatedTimeOfDay"] = convertSecondsToTime(startTimeSeconds + estimatedRaceTimeSec)
 
 			
 			#if its the last one, 
 			if split["totalDistance"] == "Total" :
 				split["estimatedRaceTime"] = latestEstimatedRaceTimeStr
+				split["estimatedTimeOfDay"] = latestEstimatedTimeOfDayStr
+				
 
 
 			# split["estimatedRaceTime"] = convertSecondsToTime(convertStringTimeToSeconds(latestRaceTime) \
@@ -130,6 +134,7 @@ def createSportObject(soup, sportTableIndex) :
 		# split["estimatedTime"] = calculateEstimatedTime(totalDistance, averageSoFar)
 		latestRaceTimeStr = split["raceTime"]
 		latestEstimatedRaceTimeStr = split["estimatedRaceTime"]
+		latestEstimatedTimeOfDayStr = split["estimatedTimeOfDay"]
 		sportObject['splits'].append(split)
 		index += 1
 
@@ -150,6 +155,8 @@ raceId = "2278373444"
 # RACE_ID="2278373444"
 race = "taiwan"
 bib = 443
+raceStartTime = "7:00:00"
+
 # BIB=1571
 randomNum = int(random.uniform(0,100))
 # url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2278373444&race=taiwan&y=2015&athlete=559#axzz3X0O9WgL1"
@@ -161,12 +168,13 @@ print url
 soup = BeautifulSoup(open("testdata/IMTW-bike-run.html"))
 # soup = BeautifulSoup(open("testdata/IMTW-full.html"))
 
+raceStartTimeSeconds = convertStringTimeToSeconds(raceStartTime)
 
 allSports = {}
 allSports["name"] = soup.h1.string
-allSports["swim"] = createSportObject(soup, 2)
-allSports["bike"] = createSportObject(soup, 3)
-allSports["run"] = createSportObject(soup, 4)
+allSports["swim"] = createSportObject(soup, 2, raceStartTimeSeconds)
+allSports["bike"] = createSportObject(soup, 3, raceStartTimeSeconds)
+allSports["run"] = createSportObject(soup, 4, raceStartTimeSeconds)
 allSports["transition"] = getTransitionData(soup, 5)
 
 print json.dumps(allSports, sort_keys=True, indent=4, separators=(',', ': '))

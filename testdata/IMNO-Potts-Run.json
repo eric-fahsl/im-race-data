@@ -1,0 +1,92 @@
+{
+    "bike": {
+        "splits": [
+            {
+                "estimatedRaceTime": "--:--",
+                "pace": "27.45 mi/h",
+                "raceTime": "2:23:04",
+                "splitDistance": "56 ",
+                "splitTime": "2:02:24",
+                "totalDistance": "Total"
+            }
+        ]
+    },
+    "name": "Andy Potts",
+    "run": {
+        "averagePerHour": 10.38,
+        "perMinuteAverage": "05:47",
+        "splits": [
+            {
+                "activityElapsedTime": "17:46",
+                "estimatedRaceTime": "--:--",
+                "estimatedTime": "17:46",
+                "pace": "5:43/mi",
+                "raceTime": "2:41:41",
+                "splitDistance": "3.1 ",
+                "splitEstimatedTime": "17:46",
+                "splitTime": "17:46",
+                "totalDistance": "3.1"
+            },
+            {
+                "activityElapsedTime": "35:50",
+                "estimatedRaceTime": "2:59:36",
+                "estimatedTime": "35:50",
+                "pace": "5:49/mi",
+                "raceTime": "2:59:45",
+                "splitDistance": "3.1 ",
+                "splitEstimatedTime": "17:55",
+                "splitTime": "18:04",
+                "totalDistance": "6.2"
+            },
+            {
+                "activityElapsedTime": "35:50",
+                "estimatedRaceTime": "3:17:40",
+                "estimatedTime": "53:45",
+                "pace": "--/mi",
+                "raceTime": "--:--",
+                "splitDistance": "3.1 ",
+                "splitEstimatedTime": "17:55",
+                "splitTime": "--:--",
+                "totalDistance": "9.3"
+            },
+            {
+                "activityElapsedTime": "35:50",
+                "estimatedRaceTime": "3:39:38",
+                "estimatedTime": "1:15:43",
+                "pace": "--/mi",
+                "raceTime": "--:--",
+                "splitDistance": "3.8 ",
+                "splitEstimatedTime": "21:58",
+                "splitTime": "--:--",
+                "totalDistance": "13.1"
+            },
+            {
+                "activityElapsedTime": "35:50",
+                "estimatedRaceTime": "3:39:38",
+                "estimatedTime": "1:15:43",
+                "pace": "--/mi",
+                "raceTime": "--:--",
+                "splitDistance": "13.1 ",
+                "splitEstimatedTime": "1:15:43",
+                "splitTime": "--:--",
+                "totalDistance": "Total"
+            }
+        ]
+    },
+    "swim": {
+        "splits": [
+            {
+                "estimatedRaceTime": "--:--",
+                "pace": "0:57/100m",
+                "raceTime": "18:35",
+                "splitDistance": "1.2 ",
+                "splitTime": "18:35",
+                "totalDistance": "Total"
+            }
+        ]
+    },
+    "transition": {
+        "T1": "2:05",
+        "T2": "0:51"
+    }
+}
