@@ -168,6 +168,7 @@ raceStartTimeSeconds = convertStringTimeToSeconds(raceStartTime)
 
 allSports = {}
 allSports["name"] = soup.h1.string
+allSports["state"] = soup.find(text="State").findNext('td').string
 allSports["url"] = url
 allSports["bib"] = bib
 

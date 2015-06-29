@@ -160,18 +160,19 @@ raceStartTime = "7:00:00"
 # BIB=1571
 randomNum = int(random.uniform(0,100))
 # url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2278373444&race=taiwan&y=2015&athlete=559#axzz3X0O9WgL1"
-url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
-# url = "http://tracking.ironmanlive.com/mobileathlete.php?rid=2147483676&race=florida70.3&bib=1571&v=3.0&beta=&1428859800#axzz3X6WZscVO"
+# url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
+url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2147483658&race=stgeorge70.3&y=2015&athlete=1856#axzz3X0O9W9"
 print url
 
-# soup = createSoup(url)
-soup = BeautifulSoup(open("testdata/IMTW-bike-run.html"))
+soup = createSoup(url)
+
 # soup = BeautifulSoup(open("testdata/IMTW-full.html"))
 
 raceStartTimeSeconds = convertStringTimeToSeconds(raceStartTime)
 
 allSports = {}
 allSports["name"] = soup.h1.string
+allSports["state"] = soup.find(text="State").findNext('td').string
 allSports["swim"] = createSportObject(soup, 2, raceStartTimeSeconds)
 allSports["bike"] = createSportObject(soup, 3, raceStartTimeSeconds)
 allSports["run"] = createSportObject(soup, 4, raceStartTimeSeconds)

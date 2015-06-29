@@ -1,8 +1,9 @@
 <div class="col-sm-6 col-md-4 col-xs-12" ng-if="data" ng-class="loadingstatus">
 <span id="racer{{bib}}">
 	<h3>{{data.name}}</h3>
+	<h5>{{data.state}}</h5>
 	<div class="addtlRacerDetails">
-		Bib #{{data.bib}}, Start Time: {{starttime}}
+		Bib #{{data.bib}}, Start Time***: {{starttime}}
 	</div>
 	<div class="refresh top-refresh" ng-click="refreshData()">Refresh Data</div>
 
