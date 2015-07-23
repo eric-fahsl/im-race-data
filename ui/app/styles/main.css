@@ -137,3 +137,7 @@ body {
   padding-top: 15px;
   padding-bottom: 15px;
 }
+
+.off-color {
+  color: blue;
+}
