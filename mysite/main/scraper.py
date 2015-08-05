@@ -3,6 +3,7 @@ import urllib
 # import xmlHelper
 import json
 import random
+from datetime import datetime
 
 ##RUN SECTION
 # sectionIndex = xmlHelper.searchContentForTag("RUN DETAILS", "", "", "", str(soup), 0)[1]
@@ -147,6 +148,8 @@ def getTransitionData(soup, transitionIndex) :
 	return transitionData
 
 def getRaceData(raceId='2278373444', race='taiwan', bib=443) :
+	timeStart = datetime.now()
+
 	# RACE_ID = "2278373444"
 	# RACE_ID="2278373444"
 	# RACE = "taiwan"
@@ -166,5 +169,8 @@ def getRaceData(raceId='2278373444', race='taiwan', bib=443) :
 	allSports["bike"] = createSportObject(soup, 3)
 	allSports["run"] = createSportObject(soup, 4)
 	allSports["transition"] = getTransitionData(soup, 5)
+
+	timeEnd = datetime.now()
+	allSports["elapsedTime"] = (timeEnd - timeStart).total_seconds()
 
 	return json.dumps(allSports)

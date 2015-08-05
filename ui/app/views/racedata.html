@@ -1,16 +1,31 @@
 <div class="col-sm-6 col-md-4 col-xs-12" ng-if="data" ng-class="loadingstatus">
 <span id="racer{{bib}}">
-	<h3>{{data.name}}</h3>
+	<h1>{{viewToggle}}</h1>
+	<h3>{{data.name}} (#{{data.bib}})</h3>
 	<h5>{{data.state}}</h5>
 	<div class="addtlRacerDetails">
-		Bib #{{data.bib}}, Start Time***: {{starttime}}
+		Start Time***: {{starttime}}
 	</div>
+	<div style="display:none;">Last Update: {{data.lastNextSplit.sport}} {{data.lastNextSplit.previous.totalDistance}}: {{data.lastNextSplit.previous.raceTime}} <br/>
+	Next Update (estimated): {{data.lastNextSplit.next.estimatedTimeOfDay}}
+
+	</div>
+	<!--
+	<tr>
+		<td>{{data.name}} (#{{data.bib}})</td>
+		<td>{{data.lastNextSplit.sport}} {{data.lastNextSplit.previous.totalDistance}}</td>
+		<td>{{data.lastNextSplit.previous.raceTime}}</td>
+		<td>{{data.lastNextSplit.next.estimatedTimeOfDay}}</td>
+	</tr>
+	-->
 	<div class="refresh top-refresh" ng-click="refreshData()">Refresh Data</div>
 
 	<race-data-table sport="Swim" splits="data.swim.splits"></race-data-table>
 	<div class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
 	<race-data-table sport="Bike" splits="data.bike.splits"></race-data-table>
+
 	<div class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
+	
 	<race-data-table sport="Run" splits="data.run.splits"></race-data-table>
 
 	<!-- Transition Table -->

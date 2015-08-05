@@ -3,6 +3,7 @@ import urllib
 import json
 import random
 import sys
+from datetime import datetime
 
 def createSoup(url) :
 	#snowUrl = "http://www.snow-forecast.com/resorts/White-Pass/feed.xml"
@@ -140,6 +141,28 @@ def getTransitionData(soup, transitionIndex) :
 	return transitionData
 
 
+def getLatestUpdate(allSports) :
+	sports = ["swim","run"]
+	lastSplit = {}
+	for sport in sports :
+		latestUpdate = getLastNextSplit(allSports[sport])
+		if latestUpdate != {} and latestUpdate != None:
+			latestUpdate["sport"] = sport
+			return latestUpdate
+	return {}
+
+def getLastNextSplit(raceData) :
+	#print raceData
+
+	lastNextSplit = {}
+	for split in raceData["splits"] :
+		lastNextSplit['next'] = split	
+		if split["raceTime"] == '--:--' :
+			return lastNextSplit
+		lastNextSplit['previous'] = split
+	return {}
+
+timeStart = datetime.now()
 raceId = "2278373444"
 # RACE_ID="2278373444"
 race = "taiwan"
@@ -176,7 +199,10 @@ allSports["swim"] = createSportObject(soup, 2, raceStartTimeSeconds)
 allSports["bike"] = createSportObject(soup, 3, raceStartTimeSeconds)
 allSports["run"] = createSportObject(soup, 4, raceStartTimeSeconds)
 allSports["transition"] = getTransitionData(soup, 5)
+allSports["lastNextSplit"] = getLatestUpdate(allSports)
 
+timeEnd = datetime.now()
+allSports["elapsedTime"] = (timeEnd - timeStart).total_seconds()
 
 print json.dumps(allSports) #, sort_keys=True, indent=4, separators=(',', ': '))
 

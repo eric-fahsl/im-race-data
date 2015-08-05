@@ -3,6 +3,7 @@ import urllib
 # import xmlHelper
 import json
 import random
+from datetime import datetime
 
 ##RUN SECTION
 # sectionIndex = xmlHelper.searchContentForTag("RUN DETAILS", "", "", "", str(soup), 0)[1]
@@ -151,18 +152,43 @@ def getTransitionData(soup, transitionIndex) :
 	transitionData['T2'] = transitionSplits[1].find_all('td')[1].string
 	return transitionData
 
-raceId = "2278373444"
+def getLatestUpdate(allSports) :
+	sports = ["swim","run"]
+	lastSplit = {}
+	for sport in sports :
+		# print sport
+		latestUpdate = getLastNextSplit(allSports[sport])
+		if latestUpdate != {} and latestUpdate != None:
+			# print latestUpdate
+			latestUpdate["sport"] = sport
+			# return latestUpdate
+	return {}
+
+
+def getLastNextSplit(raceData) :
+	# print raceData
+
+	lastNextSplit = {}
+	for split in raceData["splits"] :
+		lastNextSplit['next'] = split	
+		if split["raceTime"] == '--:--' :
+			return lastNextSplit
+		lastNextSplit['previous'] = split
+
+timeStart = datetime.now()
+
+raceId = "2147483720"
 # RACE_ID="2278373444"
-race = "taiwan"
-bib = 443
+race = "canada"
+bib = 517
 raceStartTime = "7:00:00"
 
 # BIB=1571
 randomNum = int(random.uniform(0,100))
 # url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2278373444&race=taiwan&y=2015&athlete=559#axzz3X0O9WgL1"
-# url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
-url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2147483658&race=stgeorge70.3&y=2015&athlete=1856#axzz3X0O9W9"
-print url
+url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
+#url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2147483658&race=stgeorge70.3&y=2015&athlete=1856#axzz3X0O9W9"
+# print url
 
 soup = createSoup(url)
 
@@ -177,6 +203,10 @@ allSports["swim"] = createSportObject(soup, 2, raceStartTimeSeconds)
 allSports["bike"] = createSportObject(soup, 3, raceStartTimeSeconds)
 allSports["run"] = createSportObject(soup, 4, raceStartTimeSeconds)
 allSports["transition"] = getTransitionData(soup, 5)
+allSports["lastNextSplit"] = getLatestUpdate(allSports)
+
+timeEnd = datetime.now()
+allSports["elapsedTime"] = (timeEnd - timeStart).total_seconds()
 
 print json.dumps(allSports, sort_keys=True, indent=4, separators=(',', ': '))
 

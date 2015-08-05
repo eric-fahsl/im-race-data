@@ -11,14 +11,18 @@ angular.module('uiApp')
     return {
       restrict: 'E',
       templateUrl: 'views/racedata.html',
-      controller: function($scope, dataService) {
-
+      controller: function($scope, $rootScope, dataService) {
+          if (!$rootScope.summaryData) {
+            $rootScope.summaryData = {};
+          }
+          $rootScope.testData = 'eric';
           $scope.highlighted = 'highlighted';
           $scope.refreshData = function() {
             $scope.loadingstatus = 'loading';
             dataService.getRaceResults($scope.raceid, $scope.racename, $scope.bib, $scope.starttime).then(
               function(data) {
                 $scope.data = data;
+                $rootScope.summaryData[data.bib] = data.lastNextSplit;
                 $scope.loadingstatus = '';
               }
             );

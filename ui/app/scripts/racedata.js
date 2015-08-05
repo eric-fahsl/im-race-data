@@ -53,14 +53,15 @@ var raceData = { // jshint ignore:line
       },
       'canada' : {
         'racename': 'canada',
-        'raceid': '2147483690',
+        'raceid': '2147483720',
         'bibs': [
           { 'bib':'517', 'starttime':'7:00:00'},
           { 'bib':'398', 'starttime':'7:00:00'},
           { 'bib':'990', 'starttime':'7:00:00'},
           { 'bib':'1247', 'starttime':'7:00:00'},
           { 'bib':'356', 'starttime':'7:00:00'},
-          { 'bib':'1426', 'starttime':'7:00:00'}
+          { 'bib':'1426', 'starttime':'7:00:00'},
+          { 'bib':'1036', 'starttime':'7:00:00'}
         ]
       }
     }; 
