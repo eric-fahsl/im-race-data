@@ -69,9 +69,6 @@ var raceData = { // jshint ignore:line
         'raceid': '2147483716',
         'bibs': [
           { 'bib':'20', 'starttime':'7:00:00'},
-          { 'bib':'384', 'starttime':'7:00:00'},
-          { 'bib':'329', 'starttime':'7:00:00'},
-          { 'bib':'330', 'starttime':'7:00:00'},
           { 'bib':'331', 'starttime':'7:00:00'},
           { 'bib':'332', 'starttime':'7:00:00'},
           { 'bib':'333', 'starttime':'7:00:00'}

@@ -6,18 +6,7 @@
 	<div class="addtlRacerDetails">
 		Start Time***: {{starttime}}
 	</div>
-	<div>Last Update: {{data.lastNextSplit.sport}} {{data.lastNextSplit.previous.totalDistance}}: {{data.lastNextSplit.previous.raceTime}} <br/>
-	Next Update (estimated): {{data.lastNextSplit.next.estimatedTimeOfDay}}
-
-	</div>
-	<!--
-	<tr>
-		<td>{{data.name}} (#{{data.bib}})</td>
-		<td>{{data.lastNextSplit.sport}} {{data.lastNextSplit.previous.totalDistance}}</td>
-		<td>{{data.lastNextSplit.previous.raceTime}}</td>
-		<td>{{data.lastNextSplit.next.estimatedTimeOfDay}}</td>
-	</tr>
-	-->
+	
 	<div class="refresh top-refresh" ng-click="refreshData()">Refresh Data</div>
 
 	<race-data-table sport="Swim" splits="data.swim.splits"></race-data-table>

@@ -20,47 +20,29 @@ angular.module('uiApp')
 
           $scope.highlighted = 'highlighted';
           $scope.refreshData = function() {
+            //Remove item from the summary table            
+            $rootScope.removeItemFromTable($scope.bib);
             $scope.loadingstatus = 'loading';
             dataService.getRaceResults($scope.raceid, $scope.racename, $scope.bib, $scope.starttime).then(
               function(data) {
                 $scope.data = data;
-                // $rootScope.summaryData[data.bib] = 'data.lastNextSplit';
-                // $rootScope.summaryData[data.bib] = data.bib;
-                
                 $scope.loadingstatus = '';
-                
-                console.log('before data switch');
-
+                                
                 var latestUpdate = {
-                  bib: data.bib,
-                  name: data.name, 
-                  currentSport: data.lastNextSplit.sport,
-                  lastCheckPointLoc: data.lastNextSplit.previous.totalDistance, 
-                  lastCheckPointRaceTime: data.lastNextSplit.previous.raceTime, 
-                  nextCheckPointLoc: data.lastNextSplit.next.totalDistance, 
-                  nextCheckPointRaceTime: data.lastNextSplit.previous.estimatedRaceTime
+                    bib: data.bib,
+                    totalDistance: data.lastNextSplit.totalDistance,
+                    name: data.name,
+                    currentSport: data.lastNextSplit.sport,
+                    nextCheckPointLoc: data.lastNextSplit.next.totalDistance, 
+                    nextCheckPointRaceTime: data.lastNextSplit.next.estimatedRaceTime
                 };
 
-                // $rootScope.tableData = [{name: 'Tiancum', age: 43},
-                //     {name: 'Jacob', age: 27},
-                //     {name: 'Nephi', age: 29},
-                //     {name: 'Enos', age: 34},
-                //     {name: 'Tiancum', age: 43},
-                //     {name: 'Jacob', age: 27},
-                //     {name: 'Nephi', age: 29},
-                //     {name: 'Enos', age: 34},
-                //     {name: 'Tiancum', age: 43},
-                //     {name: 'Jacob', age: 27},
-                //     {name: 'Nephi', age: 29},
-                //     {name: 'Enos', age: 34},
-                //     {name: 'Tiancum', age: 43},
-                //     {name: 'Jacob', age: 27},
-                //     {name: 'Nephi', age: 29},
-                //     {name: 'Enos', age: 34}];
+                if (data.lastNextSplit.previous) {
+                  latestUpdate.lastCheckPointLoc = data.lastNextSplit.previous.totalDistance; 
+                  latestUpdate.lastCheckPointRaceTime = data.lastNextSplit.previous.raceTime;                                     
+                }
 
                 $rootScope.updateTableParams(latestUpdate);
-
-                console.log(data);
 
               }
             );
