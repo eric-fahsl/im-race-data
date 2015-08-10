@@ -1,8 +1,37 @@
 <button onclick="$('.top-refresh').click();" type="button" style="float:left;">Reload All</button>
 <div style="clear:both; height:5px;"></div>
 
+<button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
+    <p><strong>Sorting:</strong> {{tableParams.sorting()|json}}
+
+
+    <table ng-table="tableParams" class="table">
+        <tr ng-repeat="user in $data">
+            <td data-title="'Name'" sortable="'name'">
+                {{user.name}}
+            </td>
+            <td data-title="'Current Sport'" sortable="'currentSport'">
+                {{user.currentSport}}
+            </td>
+            
+            <td data-title="'Last Checkpoint'" sortable="'lastCheckPointLoc'">
+                {{user.lastCheckPointLoc}}
+            </td>
+            <td data-title="'Last Checkpoint Time'" sortable="'lastCheckPointRaceTime'">
+                {{user.lastCheckPointRaceTime}}
+            </td>
+            <td data-title="'Next Checkpoint'" sortable="'nextCheckPointLoc'">
+                {{user.nextCheckPointLoc}}
+            </td>
+            <td data-title="'Next Checkpoint Race Time'" sortable="'nextCheckPointRaceTime'">
+                {{user.nextCheckPointRaceTime}}
+            </td>
+        </tr>
+    </table>
+
+
 <span ng-repeat="racer in raceData.bibs">
-<race-data raceid="{{raceData.raceid}}" racename="{{raceData.racename}}" bib="racer.bib" starttime="{{racer.starttime}}"></race-data>
+<race-data raceid="{{raceData.raceid}}" racename="{{raceData.racename}}" bib="racer.bib" starttime="{{racer.starttime}}" testData="{}"></race-data>
 </span>
 
 <ng-include src="'views/asterisks.html'"></ng-include>

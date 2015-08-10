@@ -16,7 +16,9 @@ angular.module('uiApp')
 		// whereshouldiski.com/im/api.php?raceId=2147483665&raceName=neworleans70.3&bib=2
 		var deferred = $q.defer();
 		$http({
-			url: 'http://54.245.232.47/im/api-new.php',
+			// url: 'http://54.245.232.47/im/api-new.php',
+			url: 'http://localhost:8000',
+			// url: 'https://im-scraper-api.herokuapp.com',
 			method: 'GET',
 			params: {
 				r: Math.random(),

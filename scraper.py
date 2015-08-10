@@ -153,7 +153,7 @@ def getTransitionData(soup, transitionIndex) :
 	return transitionData
 
 def getLatestUpdate(allSports) :
-	sports = ["swim","run"]
+	sports = ["swim","bike","run"]
 	lastSplit = {}
 	for sport in sports :
 		# print sport
@@ -162,18 +162,18 @@ def getLatestUpdate(allSports) :
 			# print latestUpdate
 			latestUpdate["sport"] = sport
 			# return latestUpdate
-	return {}
+	return latestUpdate
 
 
 def getLastNextSplit(raceData) :
-	# print raceData
-
 	lastNextSplit = {}
 	for split in raceData["splits"] :
-		lastNextSplit['next'] = split	
+		lastNextSplit['next'] = split
 		if split["raceTime"] == '--:--' :
 			return lastNextSplit
 		lastNextSplit['previous'] = split
+
+	return lastNextSplit
 
 timeStart = datetime.now()
 
@@ -186,13 +186,15 @@ raceStartTime = "7:00:00"
 # BIB=1571
 randomNum = int(random.uniform(0,100))
 # url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2278373444&race=taiwan&y=2015&athlete=559#axzz3X0O9WgL1"
-url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
+# url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
 #url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2147483658&race=stgeorge70.3&y=2015&athlete=1856#axzz3X0O9W9"
+url = "http://tracking.ironmanlive.com/mobileathlete.php?rid=2147483716&race=steelhead70.3&bib=20&v=3.0&beta=&1439134200#axzz3iKf8Dzxl"
+# url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2147483720&race=canada&y=2015&athlete=517#axzz3X0O9W70"
 # print url
 
 soup = createSoup(url)
 
-# soup = BeautifulSoup(open("testdata/IMTW-full.html"))
+#soup = BeautifulSoup(open("testdata/IMTW-bike-run.html"))
 
 raceStartTimeSeconds = convertStringTimeToSeconds(raceStartTime)
 
