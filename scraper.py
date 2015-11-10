@@ -155,24 +155,38 @@ def getTransitionData(soup, transitionIndex) :
 def getLatestUpdate(allSports) :
 	sports = ["swim","bike","run"]
 	lastSplit = {}
+	totalDistance = 0
+	allSplits = []
+
+	#first combine all splits into a single one
+	priorSplitTime = ""
 	for sport in sports :
-		# print sport
-		latestUpdate = getLastNextSplit(allSports[sport])
-		if latestUpdate != {} and latestUpdate != None:
-			# print latestUpdate
-			latestUpdate["sport"] = sport
-			# return latestUpdate
-	return latestUpdate
+		
+		for sportSplit in allSports[sport]["splits"] :
+			#next make sure the same time isn't there, don't need duplicates
+			if sportSplit["raceTime"] != priorSplitTime :
+				sportSplit["sport"] = sport
+				allSplits.append(sportSplit)
+			priorSplitTime = sportSplit["raceTime"]
+
+	#print json.dumps(allSplits)
+	return getLastNextSplit(allSplits)
+	# print getLastNextSplit(allSplits)
+	# print json.dumps(getLastNextSplit(allSplits), sort_keys=True, indent=4, separators=(',', ': '))
 
 
-def getLastNextSplit(raceData) :
-	lastNextSplit = {}
-	for split in raceData["splits"] :
+#find the "next" index, and also return the "latest"
+def getLastNextSplit(allSplits) :
+	lastNextSplit = { 'totalDistance': 0 }	
+	for split in allSplits :
 		lastNextSplit['next'] = split
+		lastNextSplit['totalDistance'] += float(split['splitDistance'])
 		if split["raceTime"] == '--:--' :
 			return lastNextSplit
 		lastNextSplit['previous'] = split
 
+	#If here, then the race is finished, delete the "next" node
+	lastNextSplit['next'] = {}
 	return lastNextSplit
 
 timeStart = datetime.now()
@@ -194,7 +208,7 @@ url = "http://tracking.ironmanlive.com/mobileathlete.php?rid=2147483716&race=ste
 
 soup = createSoup(url)
 
-#soup = BeautifulSoup(open("testdata/IMTW-bike-run.html"))
+# soup = BeautifulSoup(open("testdata/IMTW-bike.html"))
 
 raceStartTimeSeconds = convertStringTimeToSeconds(raceStartTime)
 

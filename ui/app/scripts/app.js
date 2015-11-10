@@ -29,7 +29,7 @@ angular
 
     $routeProvider.when('/:race', {
       templateUrl: 'views/race-generic.html',
-      controller: function($rootScope, $scope, $routeParams) {
+      controller: function($rootScope, $scope, $routeParams, $location, $anchorScroll) {
         $rootScope.summaryData = '';
         setScopeVariables($routeParams.race, $rootScope, $scope);
 
@@ -45,6 +45,14 @@ angular
           }
         };
 
+        $scope.scrollToElement = function(element) {
+          var old = $location.hash();
+          $location.hash(element);
+          $anchorScroll();
+          //ugly hack to get around scroll issue
+          $location.hash(old);
+        };
+
         $rootScope.updateTableParams = function(latestUpdate) {
           // console.log('about to push to list: ', latestUpdate);
           $scope.rowCollection.push(latestUpdate);
@@ -52,6 +60,27 @@ angular
 
       } 
 
+    });
+
+    $routeProvider.when('/:race/:bib', {
+      templateUrl: 'views/racer-single.html',
+      controller: function($rootScope, $scope, $routeParams) {
+        setScopeVariables($routeParams.race, $rootScope, $scope);
+
+        //find Bib in the list
+        for (var i =0; i<$scope.raceData.bibs.length; i++) {
+            var racer = $scope.raceData.bibs[i];
+            if (racer.bib === $routeParams.bib) {
+              $scope.racer = racer;
+              break;
+            }
+        }
+
+        // $scope.racer = $scope.raceData[$routeParams.bib];
+
+        $rootScope.removeItemFromTable = function(){};
+        $rootScope.updateTableParams = function(){};
+      }
     });
         
     $routeProvider

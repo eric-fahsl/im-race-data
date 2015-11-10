@@ -32,9 +32,11 @@ angular.module('uiApp')
                     bib: data.bib,
                     totalDistance: data.lastNextSplit.totalDistance,
                     name: data.name,
-                    currentSport: data.lastNextSplit.sport,
+                    currentSport: data.lastNextSplit.previous.sport,
                     nextCheckPointLoc: data.lastNextSplit.next.totalDistance, 
-                    nextCheckPointRaceTime: data.lastNextSplit.next.estimatedRaceTime
+                    nextSport: data.lastNextSplit.next.sport,
+                    nextCheckPointRaceTime: data.lastNextSplit.next.estimatedRaceTime,
+                    doneCheck: data.lastNextSplit.complete
                 };
 
                 if (data.lastNextSplit.previous) {

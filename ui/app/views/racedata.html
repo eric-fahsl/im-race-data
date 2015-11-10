@@ -1,8 +1,9 @@
-<div class="col-sm-6 col-md-4 col-xs-12" ng-if="data" ng-class="loadingstatus">
+<div class="col-sm-6 col-md-4 col-xs-12 racedatatable" ng-if="data" ng-class="loadingstatus">
 <span id="racer{{bib}}">
 	<h1>{{viewToggle}}</h1>
 	<h3>{{data.name}} (#{{data.bib}})</h3>
 	<h5>{{data.state}}</h5>
+	<div class="indivDetailsLink"><a href='#/{{racename}}/{{data.bib}}'>Individual Link</a></div>
 	<div class="addtlRacerDetails">
 		Start Time***: {{starttime}}
 	</div>

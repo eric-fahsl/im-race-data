@@ -17,8 +17,8 @@ angular.module('uiApp')
 		var deferred = $q.defer();
 		$http({
 			// url: 'http://54.245.232.47/im/api-new.php',
-			url: 'http://localhost:8000',
-			// url: 'https://im-scraper-api.herokuapp.com',
+			// url: 'http://localhost:8000',
+			url: 'https://im-scraper-api.herokuapp.com',
 			method: 'GET',
 			params: {
 				r: Math.random(),

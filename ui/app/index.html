@@ -15,6 +15,9 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+
+    <link href="http://fonts.googleapis.com/css?family=Allan:bold" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet" type="text/css">
   </head>
   <body ng-app="uiApp">
     <!--[if lt IE 7]>
@@ -46,7 +49,8 @@
               <li ng-class="menu == 'victoria' ? 'active': ''"><a href="#/victoria">Victoria 70.3</a></li>
               <li ng-class="menu == 'cda' ? 'active': ''"><a href="#/cda">CDA</a></li>
               <li ng-class="menu == 'canada' ? 'active': ''"><a href="#/canada">Canada</a></li>
-
+              <li ng-class="menu == 'lakestevens' ? 'active': ''"><a href="#/lakestevens">Lake Stevens</a></li>
+              <li ng-class="menu == 'kona' ? 'active': ''"><a href="#/kona">Kona</a></li>
             </ul>
           </div>
         </div>
@@ -78,6 +82,7 @@
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/ng-table/dist/ng-table.min.js"></script>
     <script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+    <script src="bower_components/ngSmoothScroll/angular-smooth-scroll.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

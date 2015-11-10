@@ -1,28 +1,33 @@
 <button onclick="$('.top-refresh').click();" type="button" style="float:left;">Reload All</button>
+<div class="smallItal">Click any name to scroll for full details</div>
 <div style="clear:both; height:5px;"></div>
 
-<table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
-	<thead>
-	<tr>
-		<th st-sort="name">Name</th>
-		<th st-sort="totalDistance" >Total Distance</th>
-		<th st-sort="lastCheckPointLoc" >Latest Checkpoint</th>
-		<th st-sort="lastCheckPointRaceTime">Latest Checkpoint Time</th>
-		<th st-sort="nextCheckPointLoc">Next Checkpoint</th>
-		<th st-sort="nextCheckPointRaceTime">Predicted Checkpoint Time*</th>
-	</tr>
-	</thead>
-	<tbody>
-	<tr ng-repeat="row in displayedCollection | orderBy:['-totalDistance', 'lastCheckPointRaceTime']" >
-		<td>{{row.name}}</td>
-		<td>{{row.totalDistance}}</td>
-		<td>{{row.currentSport}} {{row.lastCheckPointLoc}}</td>
-		<td>{{row.lastCheckPointRaceTime}}</td>
-		<td>{{row.currentSport}} {{row.nextCheckPointLoc}}</td>
-		<td>{{row.nextCheckPointRaceTime}}</td>
-	</tr>
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped" id="racerDataTable">
+		<thead>
+		<tr>
+			<th st-sort="name">Name</th>
+			<th st-sort="totalDistance" >Distance<br/> Completed</th>
+			<th st-sort="lastCheckPointLoc" >Latest<br/> Checkpoint</th>
+			<th st-sort="lastCheckPointRaceTime">Latest Ckpt <br/>Race Time</th>
+			<th st-sort="nextCheckPointLoc">Next <br/> Checkpoint</th>
+			<th st-sort="nextCheckPointRaceTime">Predicted Ckpt <br/>Race Time*</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="row in displayedCollection | orderBy:['-totalDistance', 'lastCheckPointRaceTime', 'name']" >
+			<td ng-click="scrollToElement('racer' + row.bib)" class="linked">
+			{{row.name}}
+			</td>
+			<td>{{row.totalDistance | number:1}}</td>
+			<td>{{row.currentSport}} {{row.lastCheckPointLoc}}</td>
+			<td>{{row.lastCheckPointRaceTime}}</td>
+			<td>{{row.doneCheck || (row.nextSport + ' ' + row.nextCheckPointLoc) }}</td>
+			<td>{{row.doneCheck || row.nextCheckPointRaceTime}}</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
 
 <span ng-repeat="racer in raceData.bibs">
 <race-data raceid="{{raceData.raceid}}" racename="{{raceData.racename}}" bib="racer.bib" starttime="{{racer.starttime}}" testData="{}"></race-data>
