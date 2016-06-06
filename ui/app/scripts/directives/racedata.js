@@ -7,7 +7,7 @@
  * # raceData
  */
 angular.module('uiApp')
-  .directive('raceData', function ($sce) {
+  .directive('raceData', function () {
     return {
       restrict: 'E',
       templateUrl: 'views/racedata.html',

@@ -1,0 +1,29 @@
+    <div class="header">
+      <div class="navbar navbar-default" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="#/">mDot Race Tracking</a>
+          </div>
+
+          <div class="collapse navbar-collapse" id="js-navbar-collapse">
+
+            <ul class="nav navbar-nav">   
+
+              <li ng-repeat="race in races" ng-class="menu === race ? 'active': ''"><a href="#/{{race}}">{{race | uppercase}}</a></li>             
+              <!-- <li ng-class="menu == 'galveston' ? 'active' : ''"><a href="#/galveston">Galveston 70.3</a></li> -->
+              <!--<li ng-class="menu == 'boulder70.3' ? 'active': ''"><a href="#/victoria70.3">Boulder 70.3</a></li>
+              <li ng-class="menu == 'victoria70.3' ? 'active': ''"><a href="#/victoria70.3">Texas</a></li>-->
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
