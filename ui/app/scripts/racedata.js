@@ -181,6 +181,33 @@ var raceData = { // jshint ignore:line
         'bibs': [          
           { 'bib':'891', 'starttime':'7:00:00'}
         ]
-      }
+      },
+      'arizona' : {
+        'racename': 'arizona',
+        'raceid': '2147483663',
+        'bibs': [          
+          { 'bib':'1991', 'starttime':'7:00:00'},
+          { 'bib':'2658', 'starttime':'7:00:00'},
+          { 'bib':'2356', 'starttime':'7:00:00'},
+          { 'bib':'1510', 'starttime':'7:00:00'},
+          { 'bib':'2251', 'starttime':'7:00:00'},
+          { 'bib':'941', 'starttime':'7:00:00'},
+          { 'bib':'1176', 'starttime':'7:00:00'},
+          { 'bib':'2091', 'starttime':'7:00:00'},
+          { 'bib':'1481', 'starttime':'7:00:00'},
+          { 'bib':'1306', 'starttime':'7:00:00'},
+          { 'bib':'575', 'starttime':'7:00:00'},
+          { 'bib':'1704', 'starttime':'7:00:00'},
+          { 'bib':'2698', 'starttime':'7:00:00'}
+        ]
+      },
+      'stcroix': {
+        'racename': 'stcroix',
+          'raceid': '727828834294',
+          'bibs': [          
+            { 'bib':'19', 'starttime':'6:30:00'},
+            { 'bib':'196', 'starttime':'6:46:00'}
+          ]
+        }
 
     }; 

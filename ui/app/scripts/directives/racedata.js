@@ -7,10 +7,12 @@
  * # raceData
  */
 angular.module('uiApp')
-  .directive('raceData', function () {
+  .directive('raceData', function ($sce) {
     return {
       restrict: 'E',
       templateUrl: 'views/racedata.html',
+      // templateUrl: $sce.trustAsResourceUrl('http://whereshouldiski.com/temp/racedata.html'),
+      // templateUrl: $sce.trustAsResourceUrl('http://caretech2aem.rebellion.t-mobile.com/content/mpcs/en/raceData.html'),      
       controller: function($scope, $rootScope, dataService) {
           // if (!$rootScope.summaryData) {
           //   $rootScope.summaryData = {};

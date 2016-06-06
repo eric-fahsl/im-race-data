@@ -21,7 +21,7 @@ angular.module('uiApp')
 			url: 'https://im-scraper-api.herokuapp.com',
 			method: 'GET',
 			params: {
-				r: Math.random(),
+				//r: Math.random(),
 				raceId: raceId,
 				raceName: raceName,
 				bib: bib,
