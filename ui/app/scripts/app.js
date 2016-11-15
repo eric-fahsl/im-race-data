@@ -39,7 +39,7 @@ angular
         $scope.autoRefreshClick = function() {
           if ($scope.autorefresh) {
             $('.top-refresh').click(); //TOTALLY HACKY UGLY AND SHOULD NOT BE DONE
-            window.setTimeout($scope.autoRefreshClick, 30000);
+            window.setTimeout($scope.autoRefreshClick, 120000);
           }
         };
 

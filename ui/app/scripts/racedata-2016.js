@@ -96,17 +96,43 @@ var raceData = { // jshint ignore:line
       },
       'IMAZ': {
         'racename': 'arizona',
-        'raceid': '21474836654',
+        'raceid': '214748366364',
         'bibs': [
           
           { 'bib': '2157', 'starttime': '07:00:00' },
           { 'bib': '2860', 'starttime': '07:00:00' },
           { 'bib': '1799', 'starttime': '07:00:00' },
           { 'bib': '2576', 'starttime': '07:00:00' },
-          { 'bib': '1767', 'starttime': '07:00:00' },
-          { 'bib': '331', 'starttime': '07:00:00' },
-          { 'bib': '1633', 'starttime': '07:00:00' },
-          { 'bib': '456', 'starttime': '07:00:00' }
+          { 'bib': '1767', 'starttime': '07:00:00' }
+                    
+        ]
+      },
+      'IMAZ-Pro': {
+        'racename': 'arizona',
+        'raceid': '214748366364',
+        'bibs': [
+          
+          { 'bib': '1', 'starttime': '06:40:00' },
+          { 'bib': '2', 'starttime': '06:40:00' },
+          { 'bib': '3', 'starttime': '06:40:00' },
+          { 'bib': '4', 'starttime': '06:40:00' },
+          { 'bib': '6', 'starttime': '06:40:00' },
+          { 'bib': '7', 'starttime': '06:40:00' },
+          { 'bib': '8', 'starttime': '06:40:00' },
+          { 'bib': '9', 'starttime': '06:40:00' },
+          { 'bib': '10', 'starttime': '06:40:00' },
+          { 'bib': '17', 'starttime': '06:40:00' },
+          
+          { 'bib': '61', 'starttime': '06:45:00' },
+          { 'bib': '62', 'starttime': '06:45:00' },
+          { 'bib': '63', 'starttime': '06:45:00' },
+          { 'bib': '64', 'starttime': '06:45:00' },
+          { 'bib': '65', 'starttime': '06:45:00' },
+          { 'bib': '66', 'starttime': '06:45:00' },
+          { 'bib': '67', 'starttime': '06:45:00' },
+          { 'bib': '68', 'starttime': '06:45:00' },
+          { 'bib': '69', 'starttime': '06:45:00' },
+          { 'bib': '70', 'starttime': '06:45:00' }
                     
         ]
       }

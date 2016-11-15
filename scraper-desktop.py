@@ -203,8 +203,8 @@ randomNum = int(random.uniform(0,100))
 # url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
 #url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2147483658&race=stgeorge70.3&y=2015&athlete=1856#axzz3X0O9W9"
 # url = "http://tracking.ironmanlive.com/mobileathlete.php?rid=2147483716&race=steelhead70.3&bib=20&v=3.0&beta=&1439134200#axzz3iKf8Dzxl"
-# url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2147483720&race=canada&y=2015&athlete=517#axzz3X0O9W70"
-url = "http://track.ironman.com/newsearch.php?y=2015&race=arizona&v=3.0&athlete=1991"
+url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2147483720&race=canada&y=2015&athlete=517#axzz3X0O9W70"
+#url = "http://track.ironman.com/newsearch.php?y=2016&race=arizona&v=3.0&athlete=169"
 # print url
 
 soup = createSoup(url)
