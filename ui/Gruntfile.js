@@ -342,6 +342,7 @@ module.exports = function (grunt) {
             '.htaccess',
             '*.html',
             'scripts/racedata.js',
+            'scripts/racedata-2016.js',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
             'styles/fonts/{,*/}*.*'

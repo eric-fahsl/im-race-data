@@ -36,6 +36,13 @@ angular
         $scope.displayedCollection = [];
         $scope.rowCollection = [];
 
+        $scope.autoRefreshClick = function() {
+          if ($scope.autorefresh) {
+            $('.top-refresh').click(); //TOTALLY HACKY UGLY AND SHOULD NOT BE DONE
+            window.setTimeout($scope.autoRefreshClick, 30000);
+          }
+        };
+
         $rootScope.removeItemFromTable = function(bib) {
           for (var i=0; i < $scope.rowCollection.length; i++ ) {
             if ($scope.rowCollection[i].bib === bib) {
