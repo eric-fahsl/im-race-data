@@ -22,34 +22,37 @@ angular.module('uiApp')
 
           $scope.highlighted = 'highlighted';
           $scope.refreshData = function() {
-            //Remove item from the summary table            
-            $rootScope.removeItemFromTable($scope.bib);
-            $scope.loadingstatus = 'loading';
-            dataService.getRaceResults($scope.raceid, $scope.racename, $scope.bib, $scope.starttime).then(
-              function(data) {
-                $scope.data = data;
-                $scope.loadingstatus = '';
-                                
-                var latestUpdate = {
-                    bib: data.bib,
-                    totalDistance: data.lastNextSplit.totalDistance,
-                    name: data.name,
-                    currentSport: data.lastNextSplit.previous.sport,
-                    nextCheckPointLoc: data.lastNextSplit.next.totalDistance, 
-                    nextSport: data.lastNextSplit.next.sport,
-                    nextCheckPointRaceTime: data.lastNextSplit.next.estimatedRaceTime,
-                    doneCheck: data.lastNextSplit.complete
-                };
+            //if we have no racer data, call the API.  If we do have racer data AND they are not finished, call the API
+            if (!$scope.data || ($scope.data && !$scope.data.finished)) {
+              //Remove item from the summary table            
+              $rootScope.removeItemFromTable($scope.bib);
+              $scope.loadingstatus = 'loading';
+              dataService.getRaceResults($scope.raceid, $scope.racename, $scope.bib, $scope.starttime).then(
+                function(data) {
+                  $scope.data = data;
+                  $scope.loadingstatus = '';
+                                  
+                  var latestUpdate = {
+                      bib: data.bib,
+                      totalDistance: data.lastNextSplit.totalDistance,
+                      name: data.name,
+                      currentSport: data.lastNextSplit.previous.sport,
+                      nextCheckPointLoc: data.lastNextSplit.next.totalDistance, 
+                      nextSport: data.lastNextSplit.next.sport,
+                      nextCheckPointRaceTime: data.lastNextSplit.next.estimatedRaceTime,
+                      doneCheck: data.lastNextSplit.complete
+                  };
 
-                if (data.lastNextSplit.previous) {
-                  latestUpdate.lastCheckPointLoc = data.lastNextSplit.previous.totalDistance; 
-                  latestUpdate.lastCheckPointRaceTime = data.lastNextSplit.previous.raceTime;                                     
+                  if (data.lastNextSplit.previous) {
+                    latestUpdate.lastCheckPointLoc = data.lastNextSplit.previous.totalDistance; 
+                    latestUpdate.lastCheckPointRaceTime = data.lastNextSplit.previous.raceTime;                                     
+                  }
+
+                  $rootScope.updateTableParams(latestUpdate);
+
                 }
-
-                $rootScope.updateTableParams(latestUpdate);
-
-              }
-            );
+              );
+            }
 
           };
 

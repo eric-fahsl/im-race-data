@@ -94,6 +94,22 @@ var raceData = { // jshint ignore:line
                     
         ]
       },
+      'IMAZ': {
+        'racename': 'arizona',
+        'raceid': '21474836654',
+        'bibs': [
+          
+          { 'bib': '2157', 'starttime': '07:00:00' },
+          { 'bib': '2860', 'starttime': '07:00:00' },
+          { 'bib': '1799', 'starttime': '07:00:00' },
+          { 'bib': '2576', 'starttime': '07:00:00' },
+          { 'bib': '1767', 'starttime': '07:00:00' },
+          { 'bib': '331', 'starttime': '07:00:00' },
+          { 'bib': '1633', 'starttime': '07:00:00' },
+          { 'bib': '456', 'starttime': '07:00:00' }
+                    
+        ]
+      }
 
 
     }; 

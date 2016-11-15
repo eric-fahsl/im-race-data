@@ -8,14 +8,14 @@
 		Start Time***: {{starttime}}
 	</div>
 	
-	<div class="refresh top-refresh" ng-click="refreshData()">Refresh Data</div>
+	<div ng-if="!data.finished" class="refresh top-refresh" ng-click="refreshData()">Refresh Data</div>
 
 	<race-data-table sport="Swim" splits="data.swim.splits"></race-data-table>
 	
-	<div class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
+	<div ng-if="!data.finished" class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
 	<race-data-table sport="Bike" splits="data.bike.splits"></race-data-table>
 
-	<div class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
+	<div ng-if="!data.finished" class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
 	
 	<race-data-table sport="Run" splits="data.run.splits"></race-data-table>
 
@@ -28,7 +28,7 @@
 		<div class="sourceLink">Source: <a target='new' href='{{data.url}}'>{{data.url}}</a></div>
 	</div>
 	<div class="col-xs-2">
-		<div class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
+		<div ng-if="!data.finished" class="refresh topPadding" ng-click="refreshData()">Refresh Data</div>
 	</div>
 
 </span>
