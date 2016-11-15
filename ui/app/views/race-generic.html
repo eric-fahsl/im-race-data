@@ -1,5 +1,5 @@
-<button onclick="$('.top-refresh').click();" type="button" style="float:left;">Reload All</button>
- &nbsp;&nbsp;Auto-refresh? <input type="checkbox" ng-change="autoRefreshClick()" ng-model="autorefresh"/> 
+<button onclick="$('.top-refresh').click()" type="button" style="float:left;">Reload All</button>
+ &nbsp;&nbsp;Auto-refresh? <input type="checkbox" ng-model="autorefresh" ng-click="autoRefreshClick()"/> {{autorefresh}} 
 <div class="smallItal">Click any name to scroll for full details</div>
 <div style="clear:both; height:5px;"></div>
 
