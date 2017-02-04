@@ -1,5 +1,4 @@
 import imScraperHelper
-import imSplitCalculator
 import json
 import random
 from datetime import datetime
@@ -45,8 +44,8 @@ def calculateEstimatedTime(distance, pace) :
 	estimatedSeconds = estimatedHours * 3600
 	return convertSecondsToTime(estimatedSeconds)
 
-def createSportObject(soup, sportTableIndex, startTimeSeconds) :
-
+def createSportObject(soup, sportTableIndex, startTimeSeconds, desktop=False) :
+	print desktop
 	sportObject = {}
 	# sportObject["activity"] = sportName
 	sportObject["splits"] = []
@@ -68,8 +67,13 @@ def createSportObject(soup, sportTableIndex, startTimeSeconds) :
 		split["totalDistance"] = tds[0].string.encode('ascii', 'ignore').replace('km', '').replace('mi', '')
 		split["splitDistance"] = tds[1].string.replace('km', '').replace('mi','')
 		split["splitTime"] = tds[2].string
-		split["pace"] = tds[4].string
-		split["raceTime"] = tds[3].string
+		if desktop :
+			split["pace"] = tds[4].string
+			split["raceTime"] = tds[3].string
+			print split
+        else :
+        	split["pace"] = tds[3].string
+        	split["raceTime"] = tds[4].string        
 
 		splitSeconds = convertStringTimeToSeconds(split["splitTime"])
 		split["estimatedRaceTime"] = "--:--"
@@ -171,50 +175,11 @@ def getLastNextSplit(allSplits) :
 	lastNextSplit['next'] = {}
 	return lastNextSplit
 
-timeStart = datetime.now()
-
-raceId = "2147483720"
-# RACE_ID="2278373444"
-race = "canada"
-bib = 517
-raceStartTime = "7:00:00"
-
-# BIB=1571
-randomNum = int(random.uniform(0,100))
-# url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2278373444&race=taiwan&y=2015&athlete=559#axzz3X0O9WgL1"
-# url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
-#url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2147483658&race=stgeorge70.3&y=2015&athlete=1856#axzz3X0O9W9"
-# url = "http://tracking.ironmanlive.com/mobileathlete.php?rid=2147483716&race=steelhead70.3&bib=20&v=3.0&beta=&1439134200#axzz3iKf8Dzxl"
-url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2147483720&race=canada&y=2015&athlete=517#axzz3X0O9W70"
-#url = "http://track.ironman.com/newsearch.php?y=2016&race=arizona&v=3.0&athlete=169"
-url = "http://track.ironman.com/newsearch.php?y=2015&race=arizona&v=3.0&athlete=1991"
-url = "http://track.ironman.com/newathlete.php?rid=2147483738321&race=florida&bib=2804&v=3.0&beta=&1479664800"
-# print url
-
-soup = imScraperHelper.createSoup(url)
-
-# soup = BeautifulSoup(open("testdata/IMTW-bike.html"))
-
-raceStartTimeSeconds = convertStringTimeToSeconds(raceStartTime)
-
-allSports = {}
-# athleteInfo = {}
-# athleteInfo["name"] = soup.h1.contents[1]
-# athleteInfo["division"] = soup.find(text="Division").findNext('td').string
-# athleteInfo["state"] = soup.find(text="State").findNext('td').string
-# athleteInfo["country"] = soup.find(text="Country").findNext('td').string
-# athleteInfo["profession"] = soup.find(text="Profession").findNext('td').string
-allSports["athlete"] = imSplitCalculator.getAthleteInfoDesktop(soup)
-
-allSports["swim"] = imSplitCalculator.createSportObject(soup, 2, raceStartTimeSeconds, True)
-allSports["bike"] = createSportObject(soup, 2, raceStartTimeSeconds)
-allSports["run"] = createSportObject(soup, 2, raceStartTimeSeconds)
-allSports["transition"] = getTransitionData(soup, 5)
-allSports["lastNextSplit"] = getLatestUpdate(allSports)
-
-timeEnd = datetime.now()
-allSports["elapsedTime"] = (timeEnd - timeStart).total_seconds()
-
-print json.dumps(allSports, sort_keys=True, indent=4, separators=(',', ': '))
-
-# print calculatePacePerHr(30, convertStringTimeToSeconds('1:03:10'))
+def getAthleteInfoDesktop(soup) :
+    athleteInfo = {}
+    athleteInfo["name"] = soup.h1.contents[1]
+    athleteInfo["division"] = soup.find(text="Division").findNext('td').string
+    athleteInfo["state"] = soup.find(text="State").findNext('td').string
+    athleteInfo["country"] = soup.find(text="Country").findNext('td').string
+    athleteInfo["profession"] = soup.find(text="Profession").findNext('td').string
+    return athleteInfo

@@ -1,5 +1,4 @@
 import imScraperHelper
-import imSplitCalculator
 import json
 import random
 from datetime import datetime
@@ -198,17 +197,17 @@ soup = imScraperHelper.createSoup(url)
 raceStartTimeSeconds = convertStringTimeToSeconds(raceStartTime)
 
 allSports = {}
-# athleteInfo = {}
-# athleteInfo["name"] = soup.h1.contents[1]
-# athleteInfo["division"] = soup.find(text="Division").findNext('td').string
-# athleteInfo["state"] = soup.find(text="State").findNext('td').string
-# athleteInfo["country"] = soup.find(text="Country").findNext('td').string
-# athleteInfo["profession"] = soup.find(text="Profession").findNext('td').string
-allSports["athlete"] = imSplitCalculator.getAthleteInfoDesktop(soup)
+athleteInfo = {}
+athleteInfo["name"] = soup.h1.contents[1]
+athleteInfo["division"] = soup.find(text="Division").findNext('td').string
+athleteInfo["state"] = soup.find(text="State").findNext('td').string
+athleteInfo["country"] = soup.find(text="Country").findNext('td').string
+athleteInfo["profession"] = soup.find(text="Profession").findNext('td').string
+allSports["athlete"] = athleteInfo
 
-allSports["swim"] = imSplitCalculator.createSportObject(soup, 2, raceStartTimeSeconds, True)
-allSports["bike"] = createSportObject(soup, 2, raceStartTimeSeconds)
-allSports["run"] = createSportObject(soup, 2, raceStartTimeSeconds)
+allSports["swim"] = createSportObject(soup, 2, raceStartTimeSeconds)
+allSports["bike"] = createSportObject(soup, 3, raceStartTimeSeconds)
+allSports["run"] = createSportObject(soup, 4, raceStartTimeSeconds)
 allSports["transition"] = getTransitionData(soup, 5)
 allSports["lastNextSplit"] = getLatestUpdate(allSports)
 
