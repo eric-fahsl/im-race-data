@@ -60,4 +60,6 @@ def retrievePage(searchTerm, pageSize, startingFrom, inputIndex='racedata', docT
     res = es.search(index="racedata", doc_type='result', body=searchBody)
     return res
 
-
+def search(searchBody, inputIndex='racedata', docType='result'):
+    res = es.search(index="racedata", doc_type='result', body=searchBody)
+    return res
