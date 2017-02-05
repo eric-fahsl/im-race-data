@@ -3,7 +3,7 @@ from elasticsearch import Elasticsearch
 import json
 import sys
 
-es = Elasticsearch()
+es = Elasticsearch( http_auth=('elastic', 'changeme'))
 
 
 def createDocument(documentObject,

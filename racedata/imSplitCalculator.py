@@ -118,7 +118,8 @@ def getRaceData(url) :
 	try :
 		allSports["athlete"] = getAthleteInfoDesktop(soup)
 		allSports["raceSummary"] = getRaceSummary(soup)
-		allSports["raceSummarySeconds"] = getRaceSummarySecondsNode(allSports["raceSummary"])
+		# allSports["raceSummarySeconds"] = getRaceSummarySecondsNode(allSports["raceSummary"])
+		allSports["raceSummaryHours"] = getRaceSummaryHoursNode(allSports["raceSummary"])
 		allSports["ranking"] = getRanking(soup)
 		
 		raceDetails = {}
@@ -159,3 +160,29 @@ def convertTimeToSeconds(stringTime) :
         splitTime.insert(0, '0')
     secondsTime = 3600 * int(splitTime[0]) + 60 * int(splitTime[1]) + int(splitTime[2])
     return secondsTime
+
+def getRaceSummaryHoursNode(raceSummaryNode) :
+	
+	raceSummaryHours = {}
+	overallHours = convertTimeToHours(raceSummaryNode['overall'])
+	
+	#create a new node under the raceSummary for just the Hours amount
+	if (overallHours > 0) :
+		raceSummaryHours = {
+			'overall': overallHours,
+			'swim': convertTimeToHours(raceSummaryNode['swim']),
+			'bike': convertTimeToHours(raceSummaryNode['bike']),
+			'run': convertTimeToHours(raceSummaryNode['run'])
+		}
+	return raceSummaryHours
+
+def convertTimeToHours(stringTime) :
+    #check to see if there is an actual time or --:--
+    
+    if (stringTime.find('--') >= 0) :
+        return 0
+    splitTime = stringTime.split(':')
+    if len(splitTime) == 2 :
+        splitTime.insert(0, '0')
+    hoursTime = int(splitTime[0]) + float(splitTime[1])/60 + float(splitTime[2])/3600
+    return hoursTime

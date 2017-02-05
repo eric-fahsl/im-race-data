@@ -71,15 +71,24 @@ def testGetAthleteLinksForRace() :
     confirmTestValue(len(json.dumps(athleteLinks)), 8982, 'testGetAthleteLinksForRace: Florida 2016 letter A')
 
 def testStringTimeToSeconds() :
-    secondsValue = elasticsearchHelper.convertTimeToSeconds('43:20')
+    secondsValue = imSplitCalculator.convertTimeToSeconds('43:20')
     confirmTestValue(secondsValue, 2600, 'testStringTimeToSeconds 43:20')
-    secondsValue = elasticsearchHelper.convertTimeToSeconds('00:43:20')
+    secondsValue = imSplitCalculator.convertTimeToSeconds('00:43:20')
     confirmTestValue(secondsValue, 2600, 'testStringTimeToSeconds 00:43:20')
-    secondsValue = elasticsearchHelper.convertTimeToSeconds('10:43:20')
+    secondsValue = imSplitCalculator.convertTimeToSeconds('10:43:20')
     confirmTestValue(secondsValue, 38600, 'testStringTimeToSeconds 10:43:20')
-    secondsValue = elasticsearchHelper.convertTimeToSeconds('--:--')
+    secondsValue = imSplitCalculator.convertTimeToSeconds('--:--')
     confirmTestValue(secondsValue, 0, 'testStringTimeToSeconds --:--')
-    
+
+def testStringTimeToHours() :
+    hoursValue = imSplitCalculator.convertTimeToHours('43:20')
+    confirmTestValue(hoursValue, 0.722222222222, 'testStringTimeToHours 43:20')
+    hoursValue = imSplitCalculator.convertTimeToHours('00:43:20')
+    confirmTestValue(hoursValue, 0.722222222222, 'testStringTimeToHours 00:43:20')
+    hoursValue = imSplitCalculator.convertTimeToHours('10:43:20')
+    confirmTestValue(hoursValue, 10.722222222222, 'testStringTimeToHours 10:43:20')
+    hoursValue = imSplitCalculator.convertTimeToHours('--:--')
+    confirmTestValue(hoursValue, 0, 'testStringTimeToHours --:--')
 
 
 # testScraperBibLogic()
@@ -88,3 +97,4 @@ def testStringTimeToSeconds() :
 # testOldRaceWithNoSwimData()
 # testGetAthleteLinksForRace()
 testStringTimeToSeconds()
+testStringTimeToHours()
