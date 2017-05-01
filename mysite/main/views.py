@@ -5,7 +5,7 @@ import json
 import scraper
 
 # Create your views here.
-def home(request):
+def index(request):
 	raceId = request.GET.get('raceId','2278373444')
 	raceName = request.GET.get('raceName','taiwan')
 	bib = request.GET.get('bib',443)
