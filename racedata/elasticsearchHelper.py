@@ -3,12 +3,14 @@ from elasticsearch import Elasticsearch
 import json
 import sys
 
+INDEX_NAME = 'racedata'
+
 es = Elasticsearch( http_auth=('elastic', 'changeme'))
 
 
 def createDocument(documentObject,
                    docId=None,
-                   inputIndex='racedata',
+                   inputIndex=INDEX_NAME,
                    docType='result'):
     try:
         if (docId == None):
@@ -24,11 +26,11 @@ def createDocument(documentObject,
 
 def updateDocument(documentObject,
                    docId,
-                   inputIndex='racedata',
+                   inputIndex=INDEX_NAME,
                    docType='result'):
     try:
-        res = es.update(
-            index=inputIndex, doc_type=docType, id=docId, body={'doc': documentObject})
+        res = es.index(
+            index=inputIndex, doc_type=docType, id=docId, body=documentObject)
         print(res)
     except:
         print("Unexpected error:", str(sys.exc_info()))
@@ -38,7 +40,7 @@ def updateDocument(documentObject,
 #Checks if the document already exists in ES
 def checkIfDocumentExists(docId, inputIndex='racedata', docType='result'):
     try:
-        res = es.get(index="racedata", doc_type='result', id=docId)
+        res = es.get(index=INDEX_NAME, doc_type='result', id=docId)
         return True
     except:
         return False
@@ -46,7 +48,7 @@ def checkIfDocumentExists(docId, inputIndex='racedata', docType='result'):
     return False
 
 
-def retrievePage(searchTerm, pageSize, startingFrom, inputIndex='racedata', docType='result'):
+def retrievePage(searchTerm, pageSize, startingFrom, inputIndex=INDEX_NAME, docType='result'):
     # res = es.search(index="racedata", doc_type='result', params='q=coeur*&size=2&from=30')
     searchBody = {
         "query": {
@@ -57,9 +59,9 @@ def retrievePage(searchTerm, pageSize, startingFrom, inputIndex='racedata', docT
         "size": pageSize,
         "from": startingFrom
     }
-    res = es.search(index="racedata", doc_type='result', body=searchBody)
+    res = es.search(index=INDEX_NAME, doc_type='result', body=searchBody)
     return res
 
-def search(searchBody, inputIndex='racedata', docType='result'):
-    res = es.search(index="racedata", doc_type='result', body=searchBody)
+def search(searchBody, inputIndex=INDEX_NAME, docType='result'):
+    res = es.search(index=INDEX_NAME, doc_type='result', body=searchBody)
     return res

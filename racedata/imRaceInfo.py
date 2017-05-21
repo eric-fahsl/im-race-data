@@ -2,6 +2,7 @@ import imScraperHelper
 import json
 import random
 from datetime import datetime
+import elasticsearchHelper
 import sys
 
 BASE_RACE_RESULTS_URL = "http://www.ironman.com/triathlon/coverage/past.aspx?p="
@@ -71,6 +72,30 @@ def getAllRaceInfo(pageStart = 2, pageEnd = 4) :
 	f.write(json.dumps(allRacesInfo))
 	f.close()
 	# '''
+
+def getAllRaceInfoToElasticSearch(pageStart = 2, pageEnd = 4) :
+	
+	for page in range(pageStart, pageEnd) :
+		print 'PAGE: '  + str(page)
+		url = BASE_RACE_RESULTS_URL + str(page)
+		soup = imScraperHelper.createSoup(url)
+		thisPageRaces = extractRaceInfo(soup)
+
+		#iterate through the races on the page.  If race not already tracked, add it to ES
+		for race in thisPageRaces :
+			try :
+				raceId = str(race['year']) + '-' + str(race['name'])
+
+				#first make sure the doc isn't already in ElasticSearch, otherwise, don't query again
+				if elasticsearchHelper.checkIfDocumentExists(raceId) == False :
+					elasticsearchHelper.createDocument(race, raceId, elasticsearchHelper.INDEX_NAME, 'raceinfo')
+					print "ADDING " + raceId
+				else:
+					print "Document already exists in ES, skipping: " + raceId
+
+			except: 
+				print("Could not parse race: ", str(race), str(sys.exc_info()))
+
 
 #Actual execution of grabbing new data
 # getAllRaceInfo()

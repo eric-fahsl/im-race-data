@@ -1,0 +1,40 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "athlete.division": "M30-34"
+          }
+        },
+        {
+          "match": {
+            "raceInfo.year": 2016
+          }
+        }
+      ],
+      "should": [
+        {
+          "match": {
+            "raceInfo.name": "canada"
+          }
+        },
+        {
+          "match": {
+            "raceInfo.name": "worldchampionship"
+          }
+        }
+      ],
+      "minimum_should_match": 1
+    }
+  },
+  "aggs": {
+    "group_by_name": {
+      "terms": {
+        "field": "athlete.name.keyword",
+        "min_doc_count": 2
+      }
+    }
+  },
+  "size": 0
+}

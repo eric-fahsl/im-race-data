@@ -5,6 +5,9 @@ from datetime import datetime
 import re
 import sys
 
+GETALLRACEDETAILS = True
+CSVDIVIDER = '\t'
+
 def createSportObjectNoPredictions(soup, sportName) :
 
 	sportObject = {}
@@ -25,9 +28,9 @@ def createSportObjectNoPredictions(soup, sportName) :
 		split = {}
 		split["totalDistance"] = tds[0].string.encode('ascii', 'ignore').replace('km', '').replace('mi', '')
 		split["splitDistance"] = tds[1].string.replace('km', '').replace('mi','').replace(' ','')
-		split["splitTime"] = tds[2].string
+		split["splitTime"] = cleanseTime(tds[2].string)
 		split["pace"] = tds[4].string
-		split["raceTime"] = tds[3].string
+		split["raceTime"] = cleanseTime(tds[3].string)
 		
 		sportObject['splits'].append(split)
 
@@ -39,8 +42,8 @@ def getTransitionData(soup, transitionString) :
 
 	# transitionData['T1'] = transitionSplits[0].find_all('td')[1].string
 	# transitionData['T2'] = transitionSplits[1].find_all('td')[1].string
-	transitionData['T1'] = getNextDomValueAfterString(soup, 'T1:', 'td', False)
-	transitionData['T2'] = getNextDomValueAfterString(soup, 'T2:', 'td', False)
+	transitionData['T1'] = cleanseTime(getNextDomValueAfterString(soup, 'T1:', 'td', False))
+	transitionData['T2'] = cleanseTime(getNextDomValueAfterString(soup, 'T2:', 'td', False))
 	return transitionData
 
 def getLatestUpdate(allSports) :
@@ -98,11 +101,26 @@ def splitRankText(input) :
 
 def getRaceSummary(soup) :
 	raceSummary = {}
-	raceSummary['swim'] = getNextDomValueAfterString(soup, 'Swim:', 'td')
-	raceSummary['bike'] = getNextDomValueAfterString(soup, 'Bike', 'td')
-	raceSummary['run'] = getNextDomValueAfterString(soup, 'Run', 'td')
+	raceSummary['swim'] = cleanseTime(getNextDomValueAfterString(soup, 'Swim:', 'td'))
+	raceSummary['bike'] = cleanseTime(getNextDomValueAfterString(soup, 'Bike', 'td'))
+	raceSummary['run'] = cleanseTime(getNextDomValueAfterString(soup, 'Run', 'td'))
 	raceSummary['overall'] = getNextDomValueAfterString(soup, 'Overall', 'td')
+	raceSummary['completed'] = determineCompletedStatus(raceSummary['overall'])
 	return raceSummary
+
+def determineCompletedStatus(overallTime) :
+	if (overallTime == '--:--') :
+		return False
+	return True	
+
+def determineDistanceOfRace(raceTitle) :
+	distance = 140.6
+	if ("70.3" in raceTitle) :
+		distance = 70.3
+	elif ("5150" in raceTitle) :
+		distance = 32.2
+	return distance
+
 
 def getRanking(soup) :
 	ranking = {}
@@ -122,15 +140,18 @@ def getRaceData(url) :
 		allSports["raceSummaryHours"] = getRaceSummaryHoursNode(allSports["raceSummary"])
 		allSports["ranking"] = getRanking(soup)
 		
-		raceDetails = {}
-		raceDetails["swim"] = createSportObjectNoPredictions(soup, 'SWIM DETAILS')
-		raceDetails["bike"] = createSportObjectNoPredictions(soup, 'BIKE DETAILS')
-		raceDetails["run"] = createSportObjectNoPredictions(soup, 'RUN DETAILS')
-		raceDetails["transition"] = getTransitionData(soup, 'Transition Details')
-		allSports['raceDetails'] = raceDetails
+		#GOING TO SKIP ADDING THE RACE DETAILS EXCEPT FOR SPECIFIC RACES
+		if (GETALLRACEDETAILS) :
+			raceDetails = {}
+			raceDetails["swim"] = createSportObjectNoPredictions(soup, 'SWIM DETAILS')
+			raceDetails["bike"] = createSportObjectNoPredictions(soup, 'BIKE DETAILS')
+			raceDetails["run"] = createSportObjectNoPredictions(soup, 'RUN DETAILS')
+			raceDetails["transition"] = getTransitionData(soup, 'Transition Details')
+			allSports['raceDetails'] = raceDetails
+
 	except: 
 		#ignore errors
-		print "COULD NOT LOAD URL: " + str(url)
+		print "COULD NOT LOAD URL: " + str(url), sys.exc_info() 
 		
 	return allSports	
 
@@ -161,6 +182,16 @@ def convertTimeToSeconds(stringTime) :
     secondsTime = 3600 * int(splitTime[0]) + 60 * int(splitTime[1]) + int(splitTime[2])
     return secondsTime
 
+def cleanseTime(stringTime) :
+	if (stringTime is None) :
+		return stringTime
+		
+	splitTime = stringTime.split(':')
+	if len(splitTime) == 2 :
+		splitTime.insert(0, '0')
+		return ':'.join(splitTime)
+	return stringTime
+
 def getRaceSummaryHoursNode(raceSummaryNode) :
 	
 	raceSummaryHours = {}
@@ -179,10 +210,24 @@ def getRaceSummaryHoursNode(raceSummaryNode) :
 def convertTimeToHours(stringTime) :
     #check to see if there is an actual time or --:--
     
-    if (stringTime.find('--') >= 0) :
-        return 0
+    if (stringTime == '' or stringTime.find('--') >= 0 or stringTime.find('Summary') >= 0) :
+        return None
     splitTime = stringTime.split(':')
     if len(splitTime) == 2 :
         splitTime.insert(0, '0')
     hoursTime = int(splitTime[0]) + float(splitTime[1])/60 + float(splitTime[2])/3600
     return hoursTime
+
+def createCsvFriendlyFormat(bibNumber, athleteInfo) :
+	line = str(bibNumber) + CSVDIVIDER
+	
+	#athlete info - name, state, division
+	line += athleteInfo['athlete']['name'] + CSVDIVIDER + athleteInfo['athlete']['state'] + CSVDIVIDER + athleteInfo['athlete']['division'] + CSVDIVIDER
+	
+	#raceSummaryInfo - total time, swim, bike, run, t1, t2
+	line += athleteInfo['raceSummary']['overall'] + CSVDIVIDER + athleteInfo['raceSummary']['swim'] + CSVDIVIDER + athleteInfo['raceSummary']['bike'] + CSVDIVIDER + athleteInfo['raceSummary']['run'] + CSVDIVIDER + athleteInfo['raceDetails']['transition']['T1'] + CSVDIVIDER + athleteInfo['raceDetails']['transition']['T2']
+
+	return line
+	#ranking - division / overall
+
+	#full splits - swim, bike, run

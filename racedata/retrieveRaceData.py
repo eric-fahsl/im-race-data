@@ -5,6 +5,10 @@ import imRaceInfo
 import json
 import sys
 
+#For encoding issues
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 RACES_MASTER_DATA = "races-master-small.json"
 # RACES_MASTER_DATA = "races-master.json"
 
@@ -62,7 +66,7 @@ for id, race in races.iteritems() :
         for athleteUrl in athleteUrls :
             bibNumber = imRaceInfo.getBibNumberFromRaceLink(athleteUrl)
             esId = createElasticSearchId(race, bibNumber)
-
+            
             #first make sure the doc isn't already in ElasticSearch, otherwise, don't query again
             if elasticsearchHelper.checkIfDocumentExists(esId) == False :
                 print "Querying: " + athleteUrl
@@ -73,5 +77,9 @@ for id, race in races.iteritems() :
                 elasticsearchHelper.createDocument(athleteData, esId)
             else:
                 print "Document already exists in ES, skipping: " + esId
-
+            
+            # print athleteUrl
+            # athleteInfo = imSplitCalculator.getRaceData(athleteUrl)
+            # print athleteInfo
+            # print imSplitCalculator.createCsvFriendlyFormat(bibNumber, athleteInfo)
 

@@ -4,7 +4,7 @@ import json
 
 RACE_SUMMARY_SPORTS = ['swim', 'bike', 'run', 'overall']
 
-QUERY = '2015'
+QUERY = '*'
 # QUERY = 'cozumel'
 
 #first do a size 0 query to get the total hit size to compute number of pages
@@ -14,14 +14,15 @@ searchBody = {
         "bool": {
             "must": {
                 "match": {
-                    "_all": QUERY
+                    "raceSummary.completed": True
                 }
             },
-            "must_not": {
+            "must_not": [{
                 "exists": {
                     "field": "raceSummaryHours"
                 }
             }
+            ]
         }
     },
     "size": 0
@@ -29,6 +30,7 @@ searchBody = {
 esPage = elasticsearchHelper.search(searchBody)
 
 TOTAL_HITS = esPage['hits']['total']
+# TOTAL_HITS = 1
 PAGE_SIZE = 100
 TOTAL_PAGES = TOTAL_HITS / PAGE_SIZE + 1  #adding one page to be safe
 
@@ -47,7 +49,7 @@ for pageIndex in range(0, TOTAL_PAGES) :
             "bool": {
                 "must": {
                     "match": {
-                        "_all": QUERY
+                        "raceSummary.completed": True
                     }
                 },
                 "must_not": {
@@ -66,6 +68,7 @@ for pageIndex in range(0, TOTAL_PAGES) :
     for raceResult in esPage['hits']['hits'] :
         #only if the raceSummaryHours node does NOT exist
         if 'raceSummaryHours' not in raceResult['_source'] and 'raceSummary' in raceResult['_source']: 
+            # print raceResult['_id']
             raceSummaryHours = imSplitCalculator.getRaceSummaryHoursNode(raceResult['_source']['raceSummary'])
             
             raceResult['_source']['raceSummaryHours'] = raceSummaryHours

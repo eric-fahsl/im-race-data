@@ -79,7 +79,8 @@ def createSportObject(soup, sportTableIndex, startTimeSeconds) :
 	latestEstimatedRaceTimeStr = "--:--"
 	index = 0
 	for i in range(2) :
-		del runSplits[0]
+		if len(runSplits) >= 2:
+			del runSplits[0]
 	for tr in runSplits :
 		tds = tr.find_all('td')
 		split = {}
@@ -183,17 +184,22 @@ def getRaceData(raceId='2278373444', race='taiwan', bib=443, raceStartTime='07:0
 	# BIB = 443
 	# BIB=1571
 	randomNum = int(random.uniform(0,100))
-	# url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=2278373444&race=taiwan&y=2015&athlete=559#axzz3X0O9WgL1"
+	####OLD VERSION THAT WAS WORKING BEFORE
 	url = "http://tracking.ironmanlive.com/mobilesearch.php?rid=" + raceId + "&race=" + race + "&y=2015&athlete=" + str(bib) + "#axzz3X0O9W" + str(randomNum)
 	# url = "http://tracking.ironmanlive.com/mobileathlete.php?rid=2147483676&race=florida70.3&bib=1571&v=3.0&beta=&1428859800#axzz3X6WZscVO"
 	#print url
-
+	
+	####NEW VERSION THAT I'M GOING TO TRY
+	#url = "http://www.ironman.com/triathlon/coverage/athlete-tracker.aspx?y=2017&rd=20170513&race=santarosa70.3&bidid=2267&detail=1#axzz4gjbF1tM0"
+	url = "http://www.ironman.com/triathlon/coverage/athlete-tracker.aspx?y=2017&race=" + race + "&bidid=" + str(bib) + "&detail=1#axzz4gjbF1tM0"
+	
 	soup = createSoup(url)
 	
 	raceStartTimeSeconds = convertStringTimeToSeconds(raceStartTime)
 
 	allSports = {}
-	allSports["name"] = soup.h1.string
+	#allSports["name"] = soup.h1.string
+	allSports["name"] = soup.findAll('h1')[1].string
 	allSports["state"] = soup.find(text="State").findNext('td').string
 	allSports["url"] = url
 	allSports["bib"] = bib

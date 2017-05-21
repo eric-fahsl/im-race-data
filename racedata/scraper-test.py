@@ -43,23 +43,38 @@ def testDesktopEricIMAZ() :
     athleteData = imSplitCalculator.getRaceData(url)
     strVal = json.dumps(athleteData)
     # print json.dumps(athleteData, sort_keys=True, indent=4, separators=(',', ': '))
-    confirmTestValue(len(strVal), 3671, 'testDesktopEricIMAZ')
+    confirmTestValue(len(strVal), 3926, 'testDesktopEricIMAZ')
 
 def test703WithNoSwim() :
     url = "http://track.ironman.com/newathlete.php?rid=2147483736012&race=longhorn70.3&bib=9&v=3.0&beta=&1479693600"
     # soup = imScraperHelper.createSoup(url)
     athleteData = imSplitCalculator.getRaceData(url)
-    # print json.dumps(athleteData, sort_keys=True, indent=4, separators=(',', ': '))
+    print json.dumps(athleteData, sort_keys=True, indent=4, separators=(',', ': '))
     strVal = json.dumps(athleteData)
-    confirmTestValue(len(strVal), 2105, 'test703WithNoSwim')
+    confirmTestValue(len(strVal), 2334, 'test703WithNoSwim')
 
 
 def testOldRaceWithNoSwimData() :
     url = "http://track.ironman.com/newathlete.php?rid=26&race=newzealand&bib=3&v=3.0&beta=&1479667500"
     athleteData = imSplitCalculator.getRaceData(url)
-    # print json.dumps(athleteData, sort_keys=True, indent=4, separators=(',', ': '))
+    print json.dumps(athleteData, sort_keys=True, indent=4, separators=(',', ': '))
     strVal = json.dumps(athleteData)
     confirmTestValue(len(strVal), 493, 'testOldRaceWithNoSwimData')
+
+def testOlderRace() :
+    url = "http://track.ironman.com/newathlete.php?rid=1143239868&race=cozumel&bib=595&v=3.0&beta=&148630770"
+    athleteData = imSplitCalculator.getRaceData(url)
+    print json.dumps(athleteData, sort_keys=True, indent=4, separators=(',', ': '))
+    strVal = json.dumps(athleteData)
+    confirmTestValue(len(strVal), 493, 'testOlderRace')
+
+def testOlderRace2() :
+    url = "http://track.ironman.com/newsearch.php?y=2011&race=coeurdalene&v=3.0&athlete=132"
+    # url = "http://www.ironman.com/triathlon/events/americas/ironman/coeur-dalene/results.aspx?rd=20110626&race=coeurdalene&bidid=132&detail=1#axzz4XmcDpDaD"
+    athleteData = imSplitCalculator.getRaceData(url)
+    print json.dumps(athleteData, sort_keys=True, indent=4, separators=(',', ': '))
+    strVal = json.dumps(athleteData)
+    confirmTestValue(len(strVal), 493, 'testOlderRace2')
 
 def testScraperBibLogic() :
     confirmTestValue(imRaceInfo.getBibNumberFromRaceLink('newathlete.php?rid=2147483738321&race=florida&bib=2804&v=3.0&beta=&1479707100'),2804,'testScraperBibLogic: bib=')
@@ -90,11 +105,30 @@ def testStringTimeToHours() :
     hoursValue = imSplitCalculator.convertTimeToHours('--:--')
     confirmTestValue(hoursValue, 0, 'testStringTimeToHours --:--')
 
+def testCompletedStatus() :
+    completedStatus = imSplitCalculator.determineCompletedStatus('11:29:23')
+    confirmTestValue(completedStatus, True, 'testCompletedStatus 11:29:23')
+    completedStatus = imSplitCalculator.determineCompletedStatus('--:--')
+    confirmTestValue(completedStatus, False, 'testCompletedStatus --:--')
 
-# testScraperBibLogic()
+def testCalculatedDistance() :
+    distance = imSplitCalculator.determineDistanceOfRace('arizona')
+    confirmTestValue(distance, 140.6, 'testDistance 140.6')
+    distance = imSplitCalculator.determineDistanceOfRace('germany70.3')
+    confirmTestValue(distance, 70.3, 'testDistance 70.3')
+    distance = imSplitCalculator.determineDistanceOfRace('5150kraichgau')
+    confirmTestValue(distance, 32.2, 'testDistance 5150kraichgau')
+
+
+testScraperBibLogic()
+testCompletedStatus()
+testCalculatedDistance()
 # testDesktopEricIMAZ()
 # test703WithNoSwim()
 # testOldRaceWithNoSwimData()
 # testGetAthleteLinksForRace()
-testStringTimeToSeconds()
-testStringTimeToHours()
+# testStringTimeToSeconds()
+# testStringTimeToHours()
+# testOldRaceWithNoSwimData()
+# testOlderRace()
+# testOlderRace2()

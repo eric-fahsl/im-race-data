@@ -4,27 +4,22 @@ import json
 
 RACE_SUMMARY_SPORTS = ['swim', 'bike', 'run', 'overall']
 
-QUERY = '2015'
+QUERY = '*'
 # QUERY = 'cozumel'
 
 #first do a size 0 query to get the total hit size to compute number of pages
 # esPage = elasticsearchHelper.retrievePage(QUERY,0,0)
 searchBody = {
-    "query": {
-        "bool": {
-            "must": {
-                "match": {
-                    "_all": QUERY
-                }
-            },
-            "must_not": {
-                "exists": {
-                    "field": "raceSummaryHours"
-                }
-            }
-        }
-    },
-    "size": 0
+	"query": {
+		"bool": {
+			"must": [{
+				"exists": {
+					"field": "doc"
+				}
+			}]
+		}
+	},
+	"size": 0
 }
 esPage = elasticsearchHelper.search(searchBody)
 
@@ -45,16 +40,13 @@ for pageIndex in range(0, TOTAL_PAGES) :
     searchBody = {
         "query": {
             "bool": {
-                "must": {
-                    "match": {
-                        "_all": QUERY
-                    }
-                },
-                "must_not": {
+                "must": [
+                    
+                    {
                     "exists": {
-                        "field": "raceSummaryHours"
+                        "field": "doc"
                     }
-                }
+                }]
             }
         },
         "size": PAGE_SIZE,
@@ -64,10 +56,7 @@ for pageIndex in range(0, TOTAL_PAGES) :
     esPage = elasticsearchHelper.search(searchBody)
 
     for raceResult in esPage['hits']['hits'] :
-        #only if the raceSummaryHours node does NOT exist
-        if 'raceSummaryHours' not in raceResult['_source'] and 'raceSummary' in raceResult['_source']: 
-            raceSummaryHours = imSplitCalculator.getRaceSummaryHoursNode(raceResult['_source']['raceSummary'])
-            
-            raceResult['_source']['raceSummaryHours'] = raceSummaryHours
-            elasticsearchHelper.updateDocument(raceResult['_source'], raceResult['_id'])
+        raceResult['_source'] = raceResult['_source']['doc']
+        # print raceResult
+        elasticsearchHelper.updateDocument(raceResult['_source'], raceResult['_id'])
 
