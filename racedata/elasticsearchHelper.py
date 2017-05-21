@@ -63,5 +63,18 @@ def retrievePage(searchTerm, pageSize, startingFrom, inputIndex=INDEX_NAME, docT
     return res
 
 def search(searchBody, inputIndex=INDEX_NAME, docType='result'):
-    res = es.search(index=INDEX_NAME, doc_type='result', body=searchBody)
+    res = es.search(index=INDEX_NAME, doc_type=docType, body=searchBody)
     return res
+
+def genericSearch(searchString, inputIndex=INDEX_NAME, docType='result') :
+    
+    queryBody = {
+        "query": {
+            "match": {
+                "_all": searchString
+                }
+        },
+        "size": 10000
+    }
+    # print docType
+    return search(queryBody, inputIndex, docType)

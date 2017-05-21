@@ -23,7 +23,17 @@ def createElasticSearchId(race, bib) :
     raceId = str(race['year']) + '-' + str(race['name']) + '-' + str(bib)
     return raceId
 
-def getRaces() :
+def getRaces(searchQuery, minYear=2013) :
+    esResults = elasticsearchHelper.genericSearch(searchQuery, elasticsearchHelper.INDEX_NAME, 'raceinfo')
+    racesToSearch = {}
+    for raceInfo in esResults['hits']['hits'] :
+        print json.dumps(raceInfo)
+        if (int(raceInfo['_source']['year']) >= minYear) :
+            racesToSearch[raceInfo['_id']] = raceInfo['_source']
+    return racesToSearch
+
+
+def getRacesFromFile() :
 	print 'Opening file for reading: ' + RACES_MASTER_DATA
 	f = open(RACES_MASTER_DATA, 'r')
 	fileData = f.read()
@@ -50,8 +60,9 @@ if len(sys.argv) > 1 :
 
 print startLetter, endLetter
 
+QUERY = 'stgeorge70.3'
 
-races = getRaces()
+races = getRaces(QUERY, 2017)
 #iterate through all races
 for id, race in races.iteritems() :
 

@@ -218,16 +218,20 @@ def convertTimeToHours(stringTime) :
     hoursTime = int(splitTime[0]) + float(splitTime[1])/60 + float(splitTime[2])/3600
     return hoursTime
 
+def createCsvHeaderLine() :
+	headers = ["BIB", "NAME", "STATE", "DIVISION", "TOTAL TIME", "SWIM", "T1", "BIKE", "T2", "RUN"]
+	return CSVDIVIDER.join(headers)
+
 def createCsvFriendlyFormat(bibNumber, athleteInfo) :
-	line = str(bibNumber) + CSVDIVIDER
+	line = [str(bibNumber)]
 	
 	#athlete info - name, state, division
-	line += athleteInfo['athlete']['name'] + CSVDIVIDER + athleteInfo['athlete']['state'] + CSVDIVIDER + athleteInfo['athlete']['division'] + CSVDIVIDER
+	line.extend([athleteInfo['athlete']['name'], athleteInfo['athlete']['state'], athleteInfo['athlete']['division']])
 	
 	#raceSummaryInfo - total time, swim, bike, run, t1, t2
-	line += athleteInfo['raceSummary']['overall'] + CSVDIVIDER + athleteInfo['raceSummary']['swim'] + CSVDIVIDER + athleteInfo['raceSummary']['bike'] + CSVDIVIDER + athleteInfo['raceSummary']['run'] + CSVDIVIDER + athleteInfo['raceDetails']['transition']['T1'] + CSVDIVIDER + athleteInfo['raceDetails']['transition']['T2']
+	line.extend([athleteInfo['raceSummary']['overall'], athleteInfo['raceSummary']['swim'], athleteInfo['raceDetails']['transition']['T1'], athleteInfo['raceSummary']['bike'], athleteInfo['raceDetails']['transition']['T2'], athleteInfo['raceSummary']['run'] ])
 
-	return line
+	return CSVDIVIDER.join(line)
 	#ranking - division / overall
 
 	#full splits - swim, bike, run
