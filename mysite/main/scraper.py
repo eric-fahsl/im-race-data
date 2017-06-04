@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import urllib
+import urllib 
 # import xmlHelper
 import json
 import random
@@ -192,6 +192,9 @@ def getRaceData(raceId='2278373444', race='taiwan', bib=443, raceStartTime='07:0
 	####NEW VERSION THAT I'M GOING TO TRY
 	#url = "http://www.ironman.com/triathlon/coverage/athlete-tracker.aspx?y=2017&rd=20170513&race=santarosa70.3&bidid=2267&detail=1#axzz4gjbF1tM0"
 	url = "http://www.ironman.com/triathlon/coverage/athlete-tracker.aspx?y=2017&race=" + race + "&bidid=" + str(bib) + "&detail=1#axzz4gjbF1tM0"
+	
+	#### NEWEST VERSION 6/2/17
+	url = "http://m.ironman.com/triathlon/coverage/athlete-tracker.aspx?race=" + race + "&bidid=" + str(bib) + "rd=" + str(raceId) + "&detail=1#axzz4gjbF1tM0"
 	
 	soup = createSoup(url)
 	
