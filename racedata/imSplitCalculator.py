@@ -84,7 +84,9 @@ def getNextDomValueAfterString(soup, input, domType, exactMatch=True) :
 
 def getAthleteInfoDesktop(soup) :
     athleteInfo = {}
-    athleteInfo["name"] = soup.h1.contents[1]
+    athleteInfo["name"] = getNextDomValueAfterString(soup, ' Back to Results', 'h1')
+	# athleteInfo["name"] = soup.h1.contents[1]
+	
     athleteInfo["division"] = getNextDomValueAfterString(soup, 'Division', 'td')
     athleteInfo["state"] = getNextDomValueAfterString(soup, 'State', 'td')
     athleteInfo["country"] = getNextDomValueAfterString(soup, 'Country', 'td')
@@ -219,19 +221,35 @@ def convertTimeToHours(stringTime) :
     return hoursTime
 
 def createCsvHeaderLine() :
-	headers = ["BIB", "NAME", "STATE", "DIVISION", "TOTAL TIME", "SWIM", "T1", "BIKE", "T2", "RUN"]
+	headers = ["YEAR", "BIB", "NAME", "STATE", "DIVISION", "TOTAL TIME", "SWIM", "T1", "BIKE", "T2", "RUN"]
 	return CSVDIVIDER.join(headers)
 
-def createCsvFriendlyFormat(bibNumber, athleteInfo) :
-	line = [str(bibNumber)]
-	
-	#athlete info - name, state, division
-	line.extend([athleteInfo['athlete']['name'], athleteInfo['athlete']['state'], athleteInfo['athlete']['division']])
+def emptyValIfNull(inputValue) :
+	if not inputValue :
+		return ''
+	else :
+		return inputValue
+
+def createCsvFriendlyFormat(athleteInfo) :
+	line = []
+	#athlete info - bib, name, state, division
+	line.extend( [athleteInfo['raceInfo']['year'], athleteInfo['raceInfo']['bib'], athleteInfo['athlete']['name'], athleteInfo['athlete']['state'], athleteInfo['athlete']['division']] )
 	
 	#raceSummaryInfo - total time, swim, bike, run, t1, t2
 	line.extend([athleteInfo['raceSummary']['overall'], athleteInfo['raceSummary']['swim'], athleteInfo['raceDetails']['transition']['T1'], athleteInfo['raceSummary']['bike'], athleteInfo['raceDetails']['transition']['T2'], athleteInfo['raceSummary']['run'] ])
+	# line.extend([athleteInfo['raceSummary']['overall'], athleteInfo['raceSummary']['swim'],  athleteInfo['raceSummary']['bike'],  athleteInfo['raceSummary']['run'] ])
 
-	return CSVDIVIDER.join(line)
 	#ranking - division / overall
 
 	#full splits - swim, bike, run
+	
+	if 'raceDetails' in athleteInfo :
+		sports = ['swim', 'bike', 'run']
+		for sport in sports :
+			if 'splits' in athleteInfo['raceDetails'][sport] :
+				for split in athleteInfo['raceDetails'][sport]['splits'] :
+					line.append(emptyValIfNull(split['splitDistance']))
+					line.append(emptyValIfNull(split['splitTime']))
+					line.append(emptyValIfNull(split['pace']))
+
+	return CSVDIVIDER.join(line)

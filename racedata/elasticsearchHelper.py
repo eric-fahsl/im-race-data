@@ -70,9 +70,31 @@ def genericSearch(searchString, inputIndex=INDEX_NAME, docType='result') :
     
     queryBody = {
         "query": {
-            "match": {
-                "_all": searchString
+            "bool": {
+                "must": {
+                    "match": {
+                        "_all": searchString
+                    }
+                },
+                "must_not": {
+                    "match": {
+                        "raceSummary.completed": "false"
+                    },
+                    "match": {
+                        "raceInfo.year": "2016"
+                    },
+                    "match": {
+                        "raceInfo.year": "2015"
+                    },
+                    "match": {
+                        "raceInfo.year": "2014"
+                    }
+                    ,
+                    "match": {
+                        "raceInfo.year": "2013"
+                    }
                 }
+            }
         },
         "size": 10000
     }

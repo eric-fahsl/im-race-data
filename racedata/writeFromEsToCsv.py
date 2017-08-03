@@ -5,7 +5,11 @@ import imRaceInfo
 import json
 import sys
 
-QUERY = 'santarosa70.3'
+#For encoding issues
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+QUERY = 'canada70.3'
 
 if len(sys.argv) > 1 :
     QUERY = sys.argv[1]
@@ -13,8 +17,7 @@ if len(sys.argv) > 1 :
 
 esResults = elasticsearchHelper.genericSearch(QUERY, elasticsearchHelper.INDEX_NAME, 'result')
 raceResults = {}
+print imSplitCalculator.createCsvHeaderLine()
 for raceData in esResults['hits']['hits'] :
-    bib = raceData['_source']['raceInfo']['bib']
-    raceData = raceData['_source']
-    print imSplitCalculator.createCsvFriendlyFormat(bib, raceData)
+    print imSplitCalculator.createCsvFriendlyFormat(raceData['_source'])
 

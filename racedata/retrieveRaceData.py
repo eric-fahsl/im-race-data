@@ -12,7 +12,7 @@ sys.setdefaultencoding('utf-8')
 RACES_MASTER_DATA = "races-master-small.json"
 # RACES_MASTER_DATA = "races-master.json"
 
-SKIP_CONDITION_STRINGS = ['5150']
+SKIP_CONDITION_STRINGS = ['5150', '2016']
 
 ############
 # Assumes race meta data already retrieved and stored in races-master.json.  
@@ -23,13 +23,18 @@ def createElasticSearchId(race, bib) :
     raceId = str(race['year']) + '-' + str(race['name']) + '-' + str(bib)
     return raceId
 
-def getRaces(searchQuery, minYear=2013) :
+def getRaces(searchQuery, minYear=2017) :
     esResults = elasticsearchHelper.genericSearch(searchQuery, elasticsearchHelper.INDEX_NAME, 'raceinfo')
     racesToSearch = {}
     for raceInfo in esResults['hits']['hits'] :
         print json.dumps(raceInfo)
+        racesToSearch[raceInfo['_id']] = raceInfo['_source']
+        '''
+        print json.dumps(raceInfo)
+        # if (int(raceInfo['_source']['year']) >= minYear) :
         if (int(raceInfo['_source']['year']) >= minYear) :
             racesToSearch[raceInfo['_id']] = raceInfo['_source']
+        '''
     return racesToSearch
 
 
@@ -58,11 +63,16 @@ if len(sys.argv) > 1 :
     startLetter = sys.argv[1]
     endLetter = sys.argv[2]
 
+QUERY = 'canada70.3'
+
+if len(sys.argv) > 3 :
+    QUERY = sys.argv[3]
+
 print startLetter, endLetter
+print QUERY
 
-QUERY = 'stgeorge70.3'
 
-races = getRaces(QUERY, 2017)
+races = getRaces(QUERY, 2013)
 #iterate through all races
 for id, race in races.iteritems() :
 
@@ -72,9 +82,10 @@ for id, race in races.iteritems() :
     else :
         # print 'race: ' + str(race)
         #get all of the Athlete URLs
-        athleteUrls = imScraperHelper.getLinksForRace(race['year'], race['name'], startLetter, endLetter)
+        athleteUrls = imScraperHelper.getLinksForRaceV2(race['year'], race['name'], startLetter, endLetter)
 
         for athleteUrl in athleteUrls :
+            print athleteUrl
             bibNumber = imRaceInfo.getBibNumberFromRaceLink(athleteUrl)
             esId = createElasticSearchId(race, bibNumber)
             

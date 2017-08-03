@@ -30,11 +30,15 @@ def getBibNumberFromRaceLink(href) :
 	#Formats:
 	#newathlete.php?rid=2147483738321&race=florida&bib=2804&v=3.0&beta=&1479707100
 	#http://track.ironman.com/newsearch.php?y=2015&race=arizona&v=3.0&athlete=1991
+	#newest  http://www.ironman.com/triathlon/coverage/athlete-tracker.aspx?y=2017&rd=20170730&race=canada70.3&bidid=3146&detail=1
 	bib = ''
+	if 'bidid=' in href :
+		bib = href.split('bidid=')[1].split('&')[0]
 	if 'bib=' in href :
 		bib = href.split('bib=')[1].split('&')[0]
 	if 'athlete=' in href :
 		bib = href.split('athlete=')[1].split('&')[0]
+	print 'BIB: ' + str(bib)
 	return bib	
 
 def getAllRaceInfo(pageStart = 2, pageEnd = 4) :
